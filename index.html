@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recruitment Daily Tracker</title>
+<style>
+  :root {
+    --fd-indigo: #4b4bf9;
+    --fd-midnight: #09092d;
+    --fd-white: #ffffff;
+    --fd-light-grey: #f3f3f7;
+    --fd-lemon: #f9ef77;
+    --fd-coral: #ff8d96;
+    --fd-lavender: #bfa1ff;
+    --fd-mint: #8bf0bb;
+    --fd-card: #0f0f35;
+    --fd-card2: #13133d;
+    --fd-border: rgba(75,75,249,0.25);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--fd-midnight);
+    color: var(--fd-white);
+    font-family: 'Segoe UI', sans-serif;
+    min-height: 100vh;
+    padding: 0 0 60px 0;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    background: var(--fd-card);
+    border-bottom: 2px solid var(--fd-indigo);
+    padding: 18px 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .header h1 {
+    font-size: 1.2rem;
+    font-weight: 700;
+  }
+
+  .header h1 span { color: var(--fd-indigo); }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .date-badge {
+    background: var(--fd-indigo);
+    color: var(--fd-white);
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+
+  /* ── SUMMARY CARDS ── */
+  .summary-section {
+    padding: 20px 28px 0;
+  }
+
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .card {
+    background: var(--fd-card);
+    border: 1px solid var(--fd-border);
+    border-radius: 12px;
+    padding: 14px 12px;
+    text-align: center;
+  }
+
+  .card .c-label {
+    font-size: 0.68rem;
+    color: var(--fd-lavender);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 6px;
+  }
+
+  .card .c-value {
+    font-size: 1.7rem;
+    font-weight: 800;
+    color: var(--fd-white);
+    line-height: 1;
+  }
+
+  .card.c-offers { border-color: var(--fd-mint); }
+  .card.c-offers .c-value { color: var(--fd-mint); }
+
+  .card.c-top { border-color: var(--fd-lemon); }
+  .card.c-top .c-value { color: var(--fd-lemon); font-size: 0.95rem; padding-top: 4px; line-height: 1.3; }
+
+  /* ── ACCOUNT BREAKDOWN ── */
+  .breakdown-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+
+  .acc-chip {
+    background: var(--fd-card2);
+    border: 1px solid var(--fd-border);
+    border-radius: 20px;
+    padding: 5px 12px;
+    font-size: 0.75rem;
+    color: var(--fd-white);
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .acc-chip .acc-name {
+    color: var(--fd-lavender);
+    font-weight: 600;
+  }
+
+  .acc-chip .acc-stat { color: var(--fd-mint); }
+
+  /* ── MAIN CONTENT ── */
+  .main {
+    padding: 20px 28px;
+  }
+
+  .toolbar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+
+  /* ── BUTTONS ── */
+  button {
+    border: none;
+    cursor: pointer;
+    font-size: 0.83rem;
+    font-weight: 600;
+    border-radius: 8px;
+    padding: 9px 18px;
+    transition: opacity 0.18s, transform 0.1s;
+    font-family: 'Segoe UI', sans-serif;
+  }
+
+  button:hover { opacity: 0.85; }
+  button:active { transform: scale(0.97); }
+
+  .btn-primary { background: var(--fd-indigo); color: var(--fd-white); }
+  .btn-mint    { background: var(--fd-mint);   color: var(--fd-midnight); }
+  .btn-lemon   { background: var(--fd-lemon);  color: var(--fd-midnight); }
+  .btn-coral   { background: var(--fd-coral);  color: var(--fd-midnight); }
+  .btn-ghost   {
+    background: transparent;
+    color: var(--fd-lavender);
+    border: 1px solid var(--fd-border);
+  }
+
+  .btn-sm {
+    padding: 5px 10px;
+    font-size: 0.75rem;
+    border-radius: 6px;
+  }
+
+  /* ── RECRUITER BLOCKS ── */
+  .recruiter-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .recruiter-block {
+    background: var(--fd-card);
+    border: 1px solid var(--fd-border);
+    border-radius: 14px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+
+  .recruiter-block.active {
+    border-color: var(--fd-indigo);
+  }
+
+  .recruiter-block.done {
+    border-color: var(--fd-mint);
+    opacity: 0.75;
+  }
+
+  .recruiter-block.no-update-block {
+    border-color: var(--fd-coral);
+    opacity: 0.6;
+  }
+
+  /* Block Header */
+  .block-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    cursor: pointer;
+    user-select: none;
+    background: var(--fd-card2);
+  }
+
+  .block-header:hover { background: rgba(75,75,249,0.1); }
+
+  .recruiter-name-input {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--fd-border);
+    color: var(--fd-white);
+    font-size: 0.95rem;
+    font-weight: 700;
+    font-family: 'Segoe UI', sans-serif;
+    outline: none;
+    flex: 1;
+    padding: 2px 4px;
+    min-width: 120px;
+  }
+
+  .recruiter-name-input::placeholder { color: rgba(255,255,255,0.3); font-weight: 400; }
+  .recruiter-name-input:focus { border-bottom-color: var(--fd-indigo); }
+
+  .block-badges {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .mini-badge {
+    font-size: 0.7rem;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-weight: 600;
+    background: rgba(75,75,249,0.2);
+    color: #a0a0ff;
+  }
+
+  .mini-badge.offer-badge {
+    background: rgba(139,240,187,0.2);
+    color: var(--fd-mint);
+  }
+
+  .collapse-icon {
+    color: var(--fd-lavender);
+    font-size: 0.8rem;
+    margin-left: auto;
+    flex-shrink: 0;
+  }
+
+  .status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--fd-border);
+    flex-shrink: 0;
+  }
+
+  .status-dot.active  { background: var(--fd-indigo); }
+  .status-dot.done    { background: var(--fd-mint); }
+  .status-dot.no-upd  { background: var(--fd-coral); }
+
+  /* Block Body */
+  .block-body {
+    padding: 14px 16px;
+    display: none;
+  }
+
+  .block-body.open { display: block; }
+
+  /* No Update Toggle */
+  .no-update-row-top {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+
+  .no-update-row-top label {
+    font-size: 0.8rem;
+    color: var(--fd-coral);
+    cursor: pointer;
+  }
+
+  .no-update-row-top input[type=checkbox] {
+    accent-color: var(--fd-coral);
+    width: 14px;
+    height: 14px;
+    cursor: pointer;
+  }
+
+  /* Account Lines */
+  .account-lines {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .account-line {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    flex-wrap: wrap;
+    background: var(--fd-card2);
+    border: 1px solid var(--fd-border);
+    border-radius: 10px;
+    padding: 8px 10px;
+    transition: border-color 0.2s;
+  }
+
+  .account-line:focus-within {
+    border-color: rgba(75,75,249,0.6);
+  }
+
+  .acc-input {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--fd-border);
+    color: var(--fd-white);
+    font-size: 0.83rem;
+    font-family: 'Segoe UI', sans-serif;
+    outline: none;
+    width: 90px;
+    padding: 2px 4px;
+  }
+
+  .acc-input::placeholder { color: rgba(255,255,255,0.3); }
+  .acc-input:focus { border-bottom-color: var(--fd-indigo); }
+
+  .stage-group {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .stage-item {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+  }
+
+  .stage-label {
+    font-size: 0.68rem;
+    color: var(--fd-lavender);
+    white-space: nowrap;
+  }
+
+  .stage-input {
+    width: 36px;
+    background: rgba(75,75,249,0.1);
+    border: 1px solid var(--fd-border);
+    border-radius: 5px;
+    color: var(--fd-white);
+    font-size: 0.8rem;
+    font-family: 'Segoe UI', sans-serif;
+    text-align: center;
+    padding: 3px 2px;
+    outline: none;
+    transition: border-color 0.2s, background 0.2s;
+  }
+
+  .stage-input:focus {
+    border-color: var(--fd-indigo);
+    background: rgba(75,75,249,0.2);
+  }
+
+  .stage-input::-webkit-inner-spin-button,
+  .stage-input::-webkit-outer-spin-button { -webkit-appearance: none; }
+
+  .comment-input {
+    background: transparent;
+    border: none;
+    border-bottom: 1px dashed var(--fd-border);
+    color: rgba(255,255,255,0.6);
+    font-size: 0.75rem;
+    font-family: 'Segoe UI', sans-serif;
+    font-style: italic;
+    outline: none;
+    flex: 1;
+    min-width: 80px;
+    padding: 2px 4px;
+  }
+
+  .comment-input::placeholder { color: rgba(255,255,255,0.2); }
+  .comment-input:focus { border-bottom-color: rgba(75,75,249,0.5); color: var(--fd-white); }
+
+  .remove-line-btn {
+    background: transparent;
+    border: none;
+    color: var(--fd-coral);
+    cursor: pointer;
+    font-size: 0.9rem;
+    padding: 2px 4px;
+    line-height: 1;
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+
+  .remove-line-btn:hover { background: rgba(255,141,150,0.15); }
+
+  /* Block Actions */
+  .block-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  /* ── TEAMS POST ── */
+  .post-section {
+    margin-top: 8px;
+  }
+
+  .section-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--fd-lavender);
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    margin-bottom: 10px;
+  }
+
+  .post-box {
+    background: var(--fd-card);
+    border: 1px solid var(--fd-border);
+    border-radius: 12px;
+    padding: 16px;
+    font-size: 0.82rem;
+    line-height: 1.75;
+    color: #c8c8ff;
+    white-space: pre-wrap;
+    font-family: 'Courier New', monospace;
+    max-height: 380px;
+    overflow-y: auto;
+    margin-bottom: 10px;
+  }
+
+  .copy-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .copy-ok {
+    font-size: 0.78rem;
+    color: var(--fd-mint);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  /* ── DIVIDER ── */
+  .divider {
+    height: 1px;
+    background: var(--fd-border);
+    margin: 20px 0;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 16px;
+    font-size: 0.7rem;
+    color: rgba(255,255,255,0.2);
+  }
+
+  footer span { color: var(--fd-indigo); font-weight: 700; }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--fd-indigo); border-radius: 10px; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 600px) {
+    .header { padding: 14px 16px; }
+    .summary-section, .main { padding: 14px 16px; }
+    .account-line { flex-direction: column; align-items: flex-start; }
+    .stage-group { flex-wrap: wrap; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <h1>📋 Daily Recruitment <span>Tracker</span></h1>
+  <div class="header-right">
+    <div class="date-badge" id="dateBadge"></div>
+  </div>
+</div>
+
+<!-- SUMMARY -->
+<div class="summary-section">
+  <div class="summary-grid">
+    <div class="card">
+      <div class="c-label">Recruiters</div>
+      <div class="c-value" id="s-recruiters">0</div>
+    </div>
+    <div class="card c-offers">
+      <div class="c-label">Total Offers</div>
+      <div class="c-value" id="s-offers">0</div>
+    </div>
+    <div class="card">
+      <div class="c-label">Total OPS</div>
+      <div class="c-value" id="s-ops">0</div>
+    </div>
+    <div class="card">
+      <div class="c-label">Total POC</div>
+      <div class="c-value" id="s-poc">0</div>
+    </div>
+    <div class="card">
+      <div class="c-label">Total HR</div>
+      <div class="c-value" id="s-hr">0</div>
+    </div>
+    <div class="card c-top">
+      <div class="c-label">⭐ Top Contributor</div>
+      <div class="c-value" id="s-top">—</div>
+    </div>
+  </div>
+
+  <!-- Account Breakdown -->
+  <div class="section-label">Account Breakdown</div>
+  <div class="breakdown-grid" id="breakdownGrid">
+    <span style="font-size:0.75rem; color:rgba(255,255,255,0.25)">No data yet...</span>
+  </div>
+
+  <div class="divider"></div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- Toolbar -->
+  <div class="toolbar">
+    <button class="btn-primary" onclick="addRecruiter()">＋ Add Recruiter</button>
+    <button class="btn-mint" onclick="generatePost()">🧮 Calculate Totals</button>
+  </div>
+
+  <!-- Recruiter Blocks -->
+  <div class="recruiter-list" id="recruiterList"></div>
+
+  <!-- Teams Post -->
+  <div class="post-section">
+    <div class="section-label">Teams Post Preview</div>
+    <div class="post-box" id="postBox">Click "Calculate Totals" to preview...</div>
+    <div class="copy-row">
+      <button class="btn-lemon" onclick="copyPost()">📋 Copy to Clipboard</button>
+      <span class="copy-ok" id="copyOk">✅ Copied to clipboard!</span>
+    </div>
+  </div>
+
+</div>
+
+<footer>Created by <span>Sayyad</span> Senior Recruitment Specialist</footer> 
+
+<script>
+// ── DATE ──
+const today = new Date();
+document.getElementById('dateBadge').textContent = today.toLocaleDateString('en-GB', {
+  weekday: 'short', day: 'numeric', month: 'short', year: 'numeric'
+});
+
+let blockCount = 0;
+
+// ── ADD RECRUITER BLOCK ──
+function addRecruiter() {
+  blockCount++;
+  const id = 'block_' + blockCount;
+  const div = document.createElement('div');
+  div.className = 'recruiter-block active';
+  div.id = id;
+
+  div.innerHTML = `
+    <div class="block-header" onclick="toggleBlock('${id}')">
+      <div class="status-dot active" id="dot_${id}"></div>
+      <input
+        class="recruiter-name-input"
+        type="text"
+        placeholder="Recruiter name..."
+        id="name_${id}"
+        onclick="event.stopPropagation()"
+        oninput="recalc()"
+      />
+      <div class="block-badges" id="badges_${id}"></div>
+      <span class="collapse-icon" id="icon_${id}">▲</span>
+    </div>
+    <div class="block-body open" id="body_${id}">
+      <div class="no-update-row-top">
+        <input type="checkbox" id="noupdate_${id}" onchange="toggleNoUpdate('${id}')"/>
+        <label for="noupdate_${id}">No update today</label>
+      </div>
+      <div class="account-lines" id="lines_${id}"></div>
+      <div class="block-actions">
+        <button class="btn-ghost btn-sm" onclick="addLine('${id}')">＋ Add Account</button>
+        <button class="btn-mint btn-sm" onclick="doneBlock('${id}')">✓ Done</button>
+        <button class="btn-coral btn-sm" onclick="removeBlock('${id}')">✕ Remove</button>
+      </div>
+    </div>
+  `;
+
+  document.getElementById('recruiterList').appendChild(div);
+  addLine(id);
+  document.getElementById('name_' + id).focus();
+}
+
+// ── ADD ACCOUNT LINE ──
+function addLine(blockId) {
+  const lineId = 'line_' + blockId + '_' + Date.now();
+  const container = document.getElementById('lines_' + blockId);
+  const div = document.createElement('div');
+  div.className = 'account-line';
+  div.id = lineId;
+
+  div.innerHTML = `
+    <input class="acc-input" type="text" placeholder="Account..." oninput="recalc()" />
+    <div class="stage-group">
+      <div class="stage-item">
+        <span class="stage-label">Offer</span>
+        <input class="stage-input" type="number" min="0" value="0"
+          oninput="recalc()" onwheel="this.blur()"/>
+      </div>
+      <div class="stage-item">
+        <span class="stage-label">OPS</span>
+        <input class="stage-input" type="number" min="0" value="0"
+          oninput="recalc()" onwheel="this.blur()"/>
+      </div>
+      <div class="stage-item">
+        <span class="stage-label">POC</span>
+        <input class="stage-input" type="number" min="0" value="0"
+          oninput="recalc()" onwheel="this.blur()"/>
+      </div>
+      <div class="stage-item">
+        <span class="stage-label">HR</span>
+        <input class="stage-input" type="number" min="0" value="0"
+          oninput="recalc()" onwheel="this.blur()"/>
+      </div>
+    </div>
+    <input class="comment-input" type="text" placeholder="Comment..." oninput="recalc()"/>
+    <button class="remove-line-btn" onclick="removeLine('${lineId}')" title="Remove line">✕</button>
+  `;
+
+  container.appendChild(div);
+  div.querySelector('.acc-input').focus();
+}
+
+// ── REMOVE LINE ──
+function removeLine(lineId) {
+  const el = document.getElementById(lineId);
+  if (el) { el.remove(); recalc(); }
+}
+
+// ── REMOVE BLOCK ──
+function removeBlock(blockId) {
+  const el = document.getElementById(blockId);
+  if (el) { el.remove(); recalc(); }
+}
+
+// ── TOGGLE COLLAPSE ──
+function toggleBlock(blockId) {
+  const body = document.getElementById('body_' + blockId);
+  const icon = document.getElementById('icon_' + blockId);
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  icon.textContent = isOpen ? '▼' : '▲';
+}
+
+// ── NO UPDATE ──
+function toggleNoUpdate(blockId) {
+  const cb = document.getElementById('noupdate_' + blockId);
+  const block = document.getElementById(blockId);
+  const lines = document.getElementById('lines_' + blockId);
+  const dot = document.getElementById('dot_' + blockId);
+
+  if (cb.checked) {
+    block.className = 'recruiter-block no-update-block';
+    dot.className = 'status-dot no-upd';
+    lines.style.opacity = '0.3';
+    lines.style.pointerEvents = 'none';
+  } else {
+    block.className = 'recruiter-block active';
+    dot.className = 'status-dot active';
+    lines.style.opacity = '1';
+    lines.style.pointerEvents = 'auto';
+  }
+  recalc();
+}
+
+// ── DONE BLOCK ──
+function doneBlock(blockId) {
+  const block = document.getElementById(blockId);
+  const body = document.getElementById('body_' + blockId);
+  const icon = document.getElementById('icon_' + blockId);
+  const dot = document.getElementById('dot_' + blockId);
+  const cb = document.getElementById('noupdate_' + blockId);
+
+  if (!cb.checked) {
+    block.className = 'recruiter-block done';
+    dot.className = 'status-dot done';
+  }
+
+  body.classList.remove('open');
+  icon.textContent = '▼';
+  recalc();
+}
+
+// ── GET ALL DATA ──
+function getAllData() {
+  const blocks = document.querySelectorAll('.recruiter-block');
+  const result = [];
+
+  blocks.forEach(block => {
+    const id = block.id;
+    const name = (document.getElementById('name_' + id)?.value || '').trim();
+    const noUpdate = document.getElementById('noupdate_' + id)?.checked || false;
+    const lines = [];
+
+    block.querySelectorAll('.account-line').forEach(line => {
+      const inputs = line.querySelectorAll('input');
+      const acc     = inputs[0].value.trim();
+      const offer   = parseInt(inputs[1].value) || 0;
+      const ops     = parseInt(inputs[2].value) || 0;
+      const poc     = parseInt(inputs[3].value) || 0;
+      const hr      = parseInt(inputs[4].value) || 0;
+      const comment = inputs[5].value.trim();
+      lines.push({ acc, offer, ops, poc, hr, comment });
+    });
+
+    result.push({ id, name, noUpdate, lines });
+  });
+
+  return result;
+}
+
+// ── RECALC ──
+function recalc() {
+  const data = getAllData();
+  let totalOffers = 0, totalOPS = 0, totalPOC = 0, totalHR = 0;
+  let activeRecruiters = 0;
+  let maxOffers = 0;
+  let topNames = [];
+  const accountMap = {};
+
+  data.forEach(rec => {
+    if (rec.noUpdate || !rec.name) return;
+    activeRecruiters++;
+
+    let recOffers = 0;
+    rec.lines.forEach(l => {
+      totalOffers += l.offer;
+      totalOPS    += l.ops;
+      totalPOC    += l.poc;
+      totalHR     += l.hr;
+      recOffers   += l.offer;
+
+      if (l.acc) {
+        const key = l.acc.toLowerCase();
+        if (!accountMap[key]) accountMap[key] = { display: l.acc, offer: 0, ops: 0, poc: 0, hr: 0 };
+        accountMap[key].offer += l.offer;
+        accountMap[key].ops   += l.ops;
+        accountMap[key].poc   += l.poc;
+        accountMap[key].hr    += l.hr;
+      }
+    });
+
+    if (recOffers > maxOffers) {
+      maxOffers = recOffers;
+      topNames = [rec.name];
+    } else if (recOffers === maxOffers && recOffers > 0) {
+      topNames.push(rec.name);
+    }
+
+    updateBadges(rec);
+  });
+
+  document.getElementById('s-recruiters').textContent = activeRecruiters;
+  document.getElementById('s-offers').textContent     = totalOffers;
+  document.getElementById('s-ops').textContent        = totalOPS;
+  document.getElementById('s-poc').textContent        = totalPOC;
+  document.getElementById('s-hr').textContent         = totalHR;
+  document.getElementById('s-top').textContent        =
+    topNames.length ? topNames.join(' · ') + (maxOffers > 0 ? ` (${maxOffers})` : '') : '—';
+
+  const grid = document.getElementById('breakdownGrid');
+  const entries = Object.values(accountMap).filter(a => (a.offer + a.ops + a.poc + a.hr) > 0);
+
+  if (entries.length === 0) {
+    grid.innerHTML = `<span style="font-size:0.75rem;color:rgba(255,255,255,0.25)">No data yet...</span>`;
+  } else {
+    grid.innerHTML = entries.map(a => {
+      const parts = [];
+      if (a.offer) parts.push(`<span class="acc-stat">${a.offer} Offer</span>`);
+      if (a.ops)   parts.push(`<span class="acc-stat">${a.ops} OPS</span>`);
+      if (a.poc)   parts.push(`<span class="acc-stat">${a.poc} POC</span>`);
+      if (a.hr)    parts.push(`<span class="acc-stat">${a.hr} HR</span>`);
+      return `<div class="acc-chip"><span class="acc-name">${a.display}</span>${parts.join('')}</div>`;
+    }).join('');
+  }
+}
+
+// ── UPDATE MINI BADGES ──
+function updateBadges(rec) {
+  const badgeContainer = document.getElementById('badges_' + rec.id);
+  if (!badgeContainer) return;
+
+  let totalOffer = 0, totalMoves = 0;
+  rec.lines.forEach(l => {
+    totalOffer += l.offer;
+    totalMoves += l.offer + l.ops + l.poc + l.hr;
+  });
+
+  let html = '';
+  if (rec.noUpdate) {
+    html = `<span class="mini-badge" style="color:var(--fd-coral);background:rgba(255,141,150,0.15)">No Update</span>`;
+  } else {
+    if (totalOffer > 0) html += `<span class="mini-badge offer-badge">${totalOffer} Offer${totalOffer>1?'s':''}</span>`;
+    if (totalMoves > 0) html += `<span class="mini-badge">${totalMoves} Moves</span>`;
+  }
+  badgeContainer.innerHTML = html;
+}
+
+// ── GENERATE / CALCULATE ──
+function generatePost() {
+  const data = getAllData();
+  const dateStr = today.toLocaleDateString('en-GB', {
+    weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
+  });
+
+  let totalOffers = 0, totalOPS = 0, totalPOC = 0, totalHR = 0;
+  let maxOffers = 0;
+  let topNames = [];
+  const accountMap = {};
+  let postLines = [];
+
+  data.forEach(rec => {
+    if (!rec.name) return;
+
+    if (rec.noUpdate) {
+      postLines.push(`  • ${rec.name}: No update today`);
+      return;
+    }
+
+    let recOffers = 0;
+    const accGroup = {};
+
+    rec.lines.forEach(l => {
+      if (!l.acc) return;
+      const key = l.acc.toLowerCase();
+      if (!accGroup[key]) accGroup[key] = { display: l.acc, offer: 0, ops: 0, poc: 0, hr: 0, comments: [] };
+      accGroup[key].offer += l.offer;
+      accGroup[key].ops   += l.ops;
+      accGroup[key].poc   += l.poc;
+      accGroup[key].hr    += l.hr;
+      if (l.comment) accGroup[key].comments.push(l.comment);
+    });
+
+    const recParts = [];
+    Object.values(accGroup).forEach(a => {
+      const stageParts = [];
+      if (a.offer) stageParts.push(`${a.offer} Offer`);
+      if (a.ops)   stageParts.push(`${a.ops} OPS`);
+      if (a.poc)   stageParts.push(`${a.poc} POC`);
+      if (a.hr)    stageParts.push(`${a.hr} HR`);
+      if (stageParts.length === 0) return;
+
+      let accLine = `${a.display}: ${stageParts.join(' · ')}`;
+      if (a.comments.length) accLine += ` (${a.comments.join(', ')})`;
+      recParts.push(accLine);
+
+      recOffers   += a.offer;
+      totalOffers += a.offer;
+      totalOPS    += a.ops;
+      totalPOC    += a.poc;
+      totalHR     += a.hr;
+
+      const key = a.display.toLowerCase();
+      if (!accountMap[key]) accountMap[key] = { display: a.display, offer: 0, ops: 0, poc: 0, hr: 0 };
+      accountMap[key].offer += a.offer;
+      accountMap[key].ops   += a.ops;
+      accountMap[key].poc   += a.poc;
+      accountMap[key].hr    += a.hr;
+    });
+
+    if (recParts.length) {
+      postLines.push(`  • ${rec.name}:\n      ${recParts.join('\n      ')}`);
+    } else {
+      postLines.push(`  • ${rec.name}: No moves recorded`);
+    }
+
+    if (recOffers > maxOffers) { maxOffers = recOffers; topNames = [rec.name]; }
+    else if (recOffers === maxOffers && recOffers > 0) topNames.push(rec.name);
+  });
+
+  const sep = '─'.repeat(42);
+
+  let post = `📋 DAILY RECRUITMENT UPDATE\n`;
+  post += `${dateStr}\n`;
+  post += `${sep}\n\n`;
+
+  post += `👥 TEAM UPDATES\n`;
+  post += postLines.join('\n') + '\n';
+
+  post += `\n📊 BY ACCOUNT\n`;
+  Object.values(accountMap).forEach(a => {
+    const parts = [];
+    if (a.offer) parts.push(`${a.offer} Offer`);
+    if (a.ops)   parts.push(`${a.ops} OPS`);
+    if (a.poc)   parts.push(`${a.poc} POC`);
+    if (a.hr)    parts.push(`${a.hr} HR`);
+    if (parts.length) post += `  ${a.display}: ${parts.join(' · ')}\n`;
+  });
+
+  post += `\n📈 TOTALS\n`;
+  if (totalOffers) post += `  Offers          : ${totalOffers}\n`;
+  if (totalOPS)    post += `  OPS             : ${totalOPS}\n`;
+  if (totalPOC)    post += `  POC             : ${totalPOC}\n`;
+  if (totalHR)     post += `  HR Interviews   : ${totalHR}\n`;
+
+  if (topNames.length) {
+    post += `\n⭐ TOP CONTRIBUTOR${topNames.length > 1 ? 'S' : ''}\n`;
+    post += `  ${topNames.join(' · ')}`;
+    if (maxOffers > 0) post += ` — ${maxOffers} Offer${maxOffers > 1 ? 's' : ''}`;
+    post += '\n';
+  }
+
+  post += `\n${sep}\n`;
+  post += `Created by Sayyad · Senior Recruitment Specialist`;
+
+  document.getElementById('postBox').textContent = post;
+}
+
+// ── COPY POST ──
+function copyPost() {
+  const text = document.getElementById('postBox').textContent;
+  if (!text || text.startsWith('Click')) return;
+  navigator.clipboard.writeText(text).then(() => {
+    const el = document.getElementById('copyOk');
+    el.style.opacity = '1';
+    setTimeout(() => el.style.opacity = '0', 2500);
+  });
+}
+</script>
+</body>
+</html>
