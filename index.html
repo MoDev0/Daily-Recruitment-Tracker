@@ -29,7 +29,6 @@
     padding: 0 0 60px 0;
   }
 
-  /* ── HEADER ── */
   .header {
     background: var(--fd-card);
     border-bottom: 2px solid var(--fd-indigo);
@@ -42,11 +41,7 @@
     z-index: 100;
   }
 
-  .header h1 {
-    font-size: 1.2rem;
-    font-weight: 700;
-  }
-
+  .header h1 { font-size: 1.2rem; font-weight: 700; }
   .header h1 span { color: var(--fd-indigo); }
 
   .header-right {
@@ -64,10 +59,7 @@
     font-weight: 600;
   }
 
-  /* ── SUMMARY CARDS ── */
-  .summary-section {
-    padding: 20px 28px 0;
-  }
+  .summary-section { padding: 20px 28px 0; }
 
   .summary-grid {
     display: grid;
@@ -101,11 +93,9 @@
 
   .card.c-offers { border-color: var(--fd-mint); }
   .card.c-offers .c-value { color: var(--fd-mint); }
-
   .card.c-top { border-color: var(--fd-lemon); }
   .card.c-top .c-value { color: var(--fd-lemon); font-size: 0.95rem; padding-top: 4px; line-height: 1.3; }
 
-  /* ── ACCOUNT BREAKDOWN ── */
   .breakdown-grid {
     display: flex;
     flex-wrap: wrap;
@@ -125,17 +115,10 @@
     align-items: center;
   }
 
-  .acc-chip .acc-name {
-    color: var(--fd-lavender);
-    font-weight: 600;
-  }
-
+  .acc-chip .acc-name { color: var(--fd-lavender); font-weight: 600; }
   .acc-chip .acc-stat { color: var(--fd-mint); }
 
-  /* ── MAIN CONTENT ── */
-  .main {
-    padding: 20px 28px;
-  }
+  .main { padding: 20px 28px; }
 
   .toolbar {
     display: flex;
@@ -144,7 +127,6 @@
     flex-wrap: wrap;
   }
 
-  /* ── BUTTONS ── */
   button {
     border: none;
     cursor: pointer;
@@ -159,11 +141,12 @@
   button:hover { opacity: 0.85; }
   button:active { transform: scale(0.97); }
 
-  .btn-primary { background: var(--fd-indigo); color: var(--fd-white); }
-  .btn-mint    { background: var(--fd-mint);   color: var(--fd-midnight); }
-  .btn-lemon   { background: var(--fd-lemon);  color: var(--fd-midnight); }
-  .btn-coral   { background: var(--fd-coral);  color: var(--fd-midnight); }
-  .btn-ghost   {
+  .btn-primary  { background: var(--fd-indigo);  color: var(--fd-white); }
+  .btn-mint     { background: var(--fd-mint);     color: var(--fd-midnight); }
+  .btn-lemon    { background: var(--fd-lemon);    color: var(--fd-midnight); }
+  .btn-coral    { background: var(--fd-coral);    color: var(--fd-midnight); }
+  .btn-lavender { background: var(--fd-lavender); color: var(--fd-midnight); }
+  .btn-ghost    {
     background: transparent;
     color: var(--fd-lavender);
     border: 1px solid var(--fd-border);
@@ -175,7 +158,6 @@
     border-radius: 6px;
   }
 
-  /* ── RECRUITER BLOCKS ── */
   .recruiter-list {
     display: flex;
     flex-direction: column;
@@ -191,21 +173,10 @@
     transition: border-color 0.2s;
   }
 
-  .recruiter-block.active {
-    border-color: var(--fd-indigo);
-  }
+  .recruiter-block.active         { border-color: var(--fd-indigo); }
+  .recruiter-block.done           { border-color: var(--fd-mint); opacity: 0.75; }
+  .recruiter-block.no-update-block{ border-color: var(--fd-coral); opacity: 0.6; }
 
-  .recruiter-block.done {
-    border-color: var(--fd-mint);
-    opacity: 0.75;
-  }
-
-  .recruiter-block.no-update-block {
-    border-color: var(--fd-coral);
-    opacity: 0.6;
-  }
-
-  /* Block Header */
   .block-header {
     display: flex;
     align-items: center;
@@ -218,7 +189,15 @@
 
   .block-header:hover { background: rgba(75,75,249,0.1); }
 
-  .recruiter-name-input {
+  /* ── SEARCHABLE DROPDOWN ── */
+  .recruiter-select-wrap {
+    position: relative;
+    flex: 1;
+    min-width: 160px;
+  }
+
+  .recruiter-search-input {
+    width: 100%;
     background: transparent;
     border: none;
     border-bottom: 1px solid var(--fd-border);
@@ -227,13 +206,57 @@
     font-weight: 700;
     font-family: 'Segoe UI', sans-serif;
     outline: none;
-    flex: 1;
     padding: 2px 4px;
-    min-width: 120px;
+    cursor: text;
   }
 
-  .recruiter-name-input::placeholder { color: rgba(255,255,255,0.3); font-weight: 400; }
-  .recruiter-name-input:focus { border-bottom-color: var(--fd-indigo); }
+  .recruiter-search-input::placeholder { color: rgba(255,255,255,0.3); font-weight: 400; }
+  .recruiter-search-input:focus { border-bottom-color: var(--fd-indigo); }
+
+  .recruiter-dropdown {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    min-width: 220px;
+    background: #1a1a4e;
+    border: 1px solid var(--fd-indigo);
+    border-radius: 10px;
+    overflow: hidden;
+    z-index: 999;
+    display: none;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+    max-height: 220px;
+    overflow-y: auto;
+  }
+
+  .recruiter-dropdown.open { display: block; }
+
+  .dropdown-item {
+    padding: 9px 14px;
+    font-size: 0.85rem;
+    color: var(--fd-white);
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+
+  .dropdown-item:hover,
+  .dropdown-item.highlighted {
+    background: rgba(75,75,249,0.3);
+    color: var(--fd-lavender);
+  }
+
+  .dropdown-item mark {
+    background: transparent;
+    color: var(--fd-mint);
+    font-weight: 700;
+  }
+
+  .dropdown-empty {
+    padding: 9px 14px;
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.3);
+    font-style: italic;
+  }
 
   .block-badges {
     display: flex;
@@ -256,34 +279,22 @@
     color: var(--fd-mint);
   }
 
-  .collapse-icon {
-    color: var(--fd-lavender);
-    font-size: 0.8rem;
-    margin-left: auto;
-    flex-shrink: 0;
-  }
+  .collapse-icon { color: var(--fd-lavender); font-size: 0.8rem; margin-left: auto; flex-shrink: 0; }
 
   .status-dot {
-    width: 8px;
-    height: 8px;
+    width: 8px; height: 8px;
     border-radius: 50%;
     background: var(--fd-border);
     flex-shrink: 0;
   }
 
-  .status-dot.active  { background: var(--fd-indigo); }
-  .status-dot.done    { background: var(--fd-mint); }
-  .status-dot.no-upd  { background: var(--fd-coral); }
+  .status-dot.active { background: var(--fd-indigo); }
+  .status-dot.done   { background: var(--fd-mint); }
+  .status-dot.no-upd { background: var(--fd-coral); }
 
-  /* Block Body */
-  .block-body {
-    padding: 14px 16px;
-    display: none;
-  }
-
+  .block-body { padding: 14px 16px; display: none; }
   .block-body.open { display: block; }
 
-  /* No Update Toggle */
   .no-update-row-top {
     display: flex;
     align-items: center;
@@ -291,20 +302,9 @@
     margin-bottom: 14px;
   }
 
-  .no-update-row-top label {
-    font-size: 0.8rem;
-    color: var(--fd-coral);
-    cursor: pointer;
-  }
+  .no-update-row-top label { font-size: 0.8rem; color: var(--fd-coral); cursor: pointer; }
+  .no-update-row-top input[type=checkbox] { accent-color: var(--fd-coral); width: 14px; height: 14px; cursor: pointer; }
 
-  .no-update-row-top input[type=checkbox] {
-    accent-color: var(--fd-coral);
-    width: 14px;
-    height: 14px;
-    cursor: pointer;
-  }
-
-  /* Account Lines */
   .account-lines {
     display: flex;
     flex-direction: column;
@@ -324,9 +324,7 @@
     transition: border-color 0.2s;
   }
 
-  .account-line:focus-within {
-    border-color: rgba(75,75,249,0.6);
-  }
+  .account-line:focus-within { border-color: rgba(75,75,249,0.6); }
 
   .acc-input {
     background: transparent;
@@ -343,24 +341,9 @@
   .acc-input::placeholder { color: rgba(255,255,255,0.3); }
   .acc-input:focus { border-bottom-color: var(--fd-indigo); }
 
-  .stage-group {
-    display: flex;
-    gap: 4px;
-    align-items: center;
-    flex-wrap: wrap;
-  }
-
-  .stage-item {
-    display: flex;
-    align-items: center;
-    gap: 3px;
-  }
-
-  .stage-label {
-    font-size: 0.68rem;
-    color: var(--fd-lavender);
-    white-space: nowrap;
-  }
+  .stage-group { display: flex; gap: 4px; align-items: center; flex-wrap: wrap; }
+  .stage-item  { display: flex; align-items: center; gap: 3px; }
+  .stage-label { font-size: 0.68rem; color: var(--fd-lavender); white-space: nowrap; }
 
   .stage-input {
     width: 36px;
@@ -376,11 +359,7 @@
     transition: border-color 0.2s, background 0.2s;
   }
 
-  .stage-input:focus {
-    border-color: var(--fd-indigo);
-    background: rgba(75,75,249,0.2);
-  }
-
+  .stage-input:focus { border-color: var(--fd-indigo); background: rgba(75,75,249,0.2); }
   .stage-input::-webkit-inner-spin-button,
   .stage-input::-webkit-outer-spin-button { -webkit-appearance: none; }
 
@@ -415,18 +394,9 @@
 
   .remove-line-btn:hover { background: rgba(255,141,150,0.15); }
 
-  /* Block Actions */
-  .block-actions {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-    flex-wrap: wrap;
-  }
+  .block-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
 
-  /* ── TEAMS POST ── */
-  .post-section {
-    margin-top: 8px;
-  }
+  .post-section { margin-top: 8px; }
 
   .section-label {
     font-size: 0.75rem;
@@ -452,10 +422,26 @@
     margin-bottom: 10px;
   }
 
+  .excel-export-box {
+    background: var(--fd-card);
+    border: 1px solid rgba(139,240,187,0.3);
+    border-radius: 12px;
+    padding: 16px;
+    font-size: 0.82rem;
+    line-height: 1.75;
+    color: #b0ffda;
+    white-space: pre-wrap;
+    font-family: 'Courier New', monospace;
+    max-height: 320px;
+    overflow-y: auto;
+    margin-bottom: 10px;
+  }
+
   .copy-row {
     display: flex;
     align-items: center;
     gap: 12px;
+    flex-wrap: wrap;
   }
 
   .copy-ok {
@@ -465,14 +451,8 @@
     transition: opacity 0.3s;
   }
 
-  /* ── DIVIDER ── */
-  .divider {
-    height: 1px;
-    background: var(--fd-border);
-    margin: 20px 0;
-  }
+  .divider { height: 1px; background: var(--fd-border); margin: 20px 0; }
 
-  /* ── FOOTER ── */
   footer {
     text-align: center;
     padding: 16px;
@@ -482,12 +462,10 @@
 
   footer span { color: var(--fd-indigo); font-weight: 700; }
 
-  /* ── SCROLLBAR ── */
   ::-webkit-scrollbar { width: 5px; }
   ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb { background: var(--fd-indigo); border-radius: 10px; }
 
-  /* ── RESPONSIVE ── */
   @media (max-width: 600px) {
     .header { padding: 14px 16px; }
     .summary-section, .main { padding: 14px 16px; }
@@ -535,25 +513,21 @@
     </div>
   </div>
 
-  <!-- Account Breakdown -->
   <div class="section-label">Account Breakdown</div>
   <div class="breakdown-grid" id="breakdownGrid">
     <span style="font-size:0.75rem; color:rgba(255,255,255,0.25)">No data yet...</span>
   </div>
-
   <div class="divider"></div>
 </div>
 
 <!-- MAIN -->
 <div class="main">
 
-  <!-- Toolbar -->
   <div class="toolbar">
     <button class="btn-primary" onclick="addRecruiter()">＋ Add Recruiter</button>
-    <button class="btn-mint" onclick="generatePost()">🧮 Calculate Totals</button>
+    <button class="btn-mint"    onclick="generatePost()">🧮 Calculate Totals</button>
   </div>
 
-  <!-- Recruiter Blocks -->
   <div class="recruiter-list" id="recruiterList"></div>
 
   <!-- Teams Post -->
@@ -561,16 +535,59 @@
     <div class="section-label">Teams Post Preview</div>
     <div class="post-box" id="postBox">Click "Calculate Totals" to preview...</div>
     <div class="copy-row">
-      <button class="btn-lemon" onclick="copyPost()">📋 Copy to Clipboard</button>
-      <span class="copy-ok" id="copyOk">✅ Copied to clipboard!</span>
+      <button class="btn-lemon" onclick="copyPost()">📋 Copy for Teams</button>
+      <span class="copy-ok" id="copyOk">✅ Copied!</span>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- Excel Export -->
+  <div class="post-section">
+    <div class="section-label">📊 Excel Export</div>
+    <div class="excel-export-box" id="excelBox">Click "Calculate Totals" first, then "Generate Excel Export"...</div>
+    <div class="copy-row">
+      <button class="btn-lavender" onclick="generateExcelExport()">📊 Generate Excel Export</button>
+      <button class="btn-mint"     onclick="copyExcel()">📋 Copy for Excel</button>
+      <span class="copy-ok" id="copyOkExcel">✅ Copied!</span>
     </div>
   </div>
 
 </div>
 
-<footer>Created by <span>Sayyad</span> Senior Recruitment Specialist</footer> 
+<footer>
+  Created by <span>Sayyad</span> · Senior Recruitment Specialist
+ 
+</footer>
 
 <script>
+// ── RECRUITER NAMES LIST (hardcoded) ──
+const RECRUITER_NAMES = [
+  "Ahmed Amr",
+  "Yussuf Hesham",
+  "Rana Maawad",
+  "Omar Kassem",
+  "Aya Mohamed",
+  "Ahmed Abdelfatah",
+  "Veronica Nady",
+  "Sarah Mohamed",
+  "Nouran Abdelmonem",
+  "Nada Bassyouni",
+  "Yara Sabry",
+  "Ahmed Shahat",
+  "Habiba Waleed",
+  "Mostafa Alaaeldin",
+  "Mahmoud Elshwadfey",
+  "Aya Mostafa",
+  "Ghaidaa Hussien",
+  "Shahd Abdelghafar",
+  "Gameela Alberry",
+  "Farah Khalid",
+  "Ahmed Ashraf",
+  "Yassmin Ashraf",
+  "Nour Waleed"
+];
+
 // ── DATE ──
 const today = new Date();
 document.getElementById('dateBadge').textContent = today.toLocaleDateString('en-GB', {
@@ -578,6 +595,13 @@ document.getElementById('dateBadge').textContent = today.toLocaleDateString('en-
 });
 
 let blockCount = 0;
+
+// ── CLOSE ALL DROPDOWNS ──
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.recruiter-select-wrap')) {
+    document.querySelectorAll('.recruiter-dropdown').forEach(d => d.classList.remove('open'));
+  }
+});
 
 // ── ADD RECRUITER BLOCK ──
 function addRecruiter() {
@@ -590,14 +614,21 @@ function addRecruiter() {
   div.innerHTML = `
     <div class="block-header" onclick="toggleBlock('${id}')">
       <div class="status-dot active" id="dot_${id}"></div>
-      <input
-        class="recruiter-name-input"
-        type="text"
-        placeholder="Recruiter name..."
-        id="name_${id}"
-        onclick="event.stopPropagation()"
-        oninput="recalc()"
-      />
+
+      <!-- Searchable Dropdown -->
+      <div class="recruiter-select-wrap" onclick="event.stopPropagation()">
+        <input
+          class="recruiter-search-input"
+          type="text"
+          placeholder="Search recruiter..."
+          id="name_${id}"
+          autocomplete="off"
+          oninput="filterDropdown('${id}')"
+          onfocus="openDropdown('${id}')"
+        />
+        <div class="recruiter-dropdown" id="dropdown_${id}"></div>
+      </div>
+
       <div class="block-badges" id="badges_${id}"></div>
       <span class="collapse-icon" id="icon_${id}">▲</span>
     </div>
@@ -609,7 +640,7 @@ function addRecruiter() {
       <div class="account-lines" id="lines_${id}"></div>
       <div class="block-actions">
         <button class="btn-ghost btn-sm" onclick="addLine('${id}')">＋ Add Account</button>
-        <button class="btn-mint btn-sm" onclick="doneBlock('${id}')">✓ Done</button>
+        <button class="btn-mint  btn-sm" onclick="doneBlock('${id}')">✓ Done</button>
         <button class="btn-coral btn-sm" onclick="removeBlock('${id}')">✕ Remove</button>
       </div>
     </div>
@@ -617,39 +648,113 @@ function addRecruiter() {
 
   document.getElementById('recruiterList').appendChild(div);
   addLine(id);
+  openDropdown(id);
   document.getElementById('name_' + id).focus();
+}
+
+// ── OPEN DROPDOWN ──
+function openDropdown(blockId) {
+  const query    = (document.getElementById('name_' + blockId)?.value || '').toLowerCase().trim();
+  const dropdown = document.getElementById('dropdown_' + blockId);
+
+  // Close all others first
+  document.querySelectorAll('.recruiter-dropdown').forEach(d => {
+    if (d.id !== 'dropdown_' + blockId) d.classList.remove('open');
+  });
+
+  // Get already used names
+  const usedNames = getUsedNames(blockId);
+
+  // Filter list
+  const filtered = RECRUITER_NAMES.filter(name =>
+    name.toLowerCase().includes(query) && !usedNames.includes(name)
+  );
+
+  renderDropdown(blockId, filtered, query);
+  dropdown.classList.add('open');
+}
+
+// ── FILTER DROPDOWN ──
+function filterDropdown(blockId) {
+  const query    = (document.getElementById('name_' + blockId)?.value || '').toLowerCase().trim();
+  const usedNames = getUsedNames(blockId);
+
+  const filtered = RECRUITER_NAMES.filter(name =>
+    name.toLowerCase().includes(query) && !usedNames.includes(name)
+  );
+
+  renderDropdown(blockId, filtered, query);
+  document.getElementById('dropdown_' + blockId).classList.add('open');
+  recalc();
+}
+
+// ── RENDER DROPDOWN ITEMS ──
+function renderDropdown(blockId, names, query) {
+  const dropdown = document.getElementById('dropdown_' + blockId);
+
+  if (names.length === 0) {
+    dropdown.innerHTML = `<div class="dropdown-empty">No matches found</div>`;
+    return;
+  }
+
+  dropdown.innerHTML = names.map(name => {
+    const highlighted = query
+      ? name.replace(new RegExp(`(${escapeRegex(query)})`, 'gi'),
+          '<mark>$1</mark>')
+      : name;
+    return `<div class="dropdown-item" onclick="selectRecruiter('${blockId}', '${name}')">${highlighted}</div>`;
+  }).join('');
+}
+
+// ── SELECT RECRUITER FROM DROPDOWN ──
+function selectRecruiter(blockId, name) {
+  document.getElementById('name_' + blockId).value = name;
+  document.getElementById('dropdown_' + blockId).classList.remove('open');
+  recalc();
+}
+
+// ── GET ALREADY USED NAMES (prevent duplicates) ──
+function getUsedNames(currentBlockId) {
+  const used = [];
+  document.querySelectorAll('.recruiter-block').forEach(block => {
+    if (block.id === currentBlockId) return;
+    const val = document.getElementById('name_' + block.id)?.value?.trim();
+    if (val) used.push(val);
+  });
+  return used;
+}
+
+// ── ESCAPE REGEX SPECIAL CHARS ──
+function escapeRegex(str) {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
 // ── ADD ACCOUNT LINE ──
 function addLine(blockId) {
-  const lineId = 'line_' + blockId + '_' + Date.now();
+  const lineId    = 'line_' + blockId + '_' + Date.now();
   const container = document.getElementById('lines_' + blockId);
-  const div = document.createElement('div');
-  div.className = 'account-line';
-  div.id = lineId;
+  const div       = document.createElement('div');
+  div.className   = 'account-line';
+  div.id          = lineId;
 
   div.innerHTML = `
     <input class="acc-input" type="text" placeholder="Account..." oninput="recalc()" />
     <div class="stage-group">
       <div class="stage-item">
         <span class="stage-label">Offer</span>
-        <input class="stage-input" type="number" min="0" value="0"
-          oninput="recalc()" onwheel="this.blur()"/>
+        <input class="stage-input" type="number" min="0" value="0" oninput="recalc()" onwheel="this.blur()"/>
       </div>
       <div class="stage-item">
         <span class="stage-label">OPS</span>
-        <input class="stage-input" type="number" min="0" value="0"
-          oninput="recalc()" onwheel="this.blur()"/>
+        <input class="stage-input" type="number" min="0" value="0" oninput="recalc()" onwheel="this.blur()"/>
       </div>
       <div class="stage-item">
         <span class="stage-label">POC</span>
-        <input class="stage-input" type="number" min="0" value="0"
-          oninput="recalc()" onwheel="this.blur()"/>
+        <input class="stage-input" type="number" min="0" value="0" oninput="recalc()" onwheel="this.blur()"/>
       </div>
       <div class="stage-item">
         <span class="stage-label">HR</span>
-        <input class="stage-input" type="number" min="0" value="0"
-          oninput="recalc()" onwheel="this.blur()"/>
+        <input class="stage-input" type="number" min="0" value="0" oninput="recalc()" onwheel="this.blur()"/>
       </div>
     </div>
     <input class="comment-input" type="text" placeholder="Comment..." oninput="recalc()"/>
@@ -660,61 +765,55 @@ function addLine(blockId) {
   div.querySelector('.acc-input').focus();
 }
 
-// ── REMOVE LINE ──
 function removeLine(lineId) {
   const el = document.getElementById(lineId);
   if (el) { el.remove(); recalc(); }
 }
 
-// ── REMOVE BLOCK ──
 function removeBlock(blockId) {
   const el = document.getElementById(blockId);
   if (el) { el.remove(); recalc(); }
 }
 
-// ── TOGGLE COLLAPSE ──
 function toggleBlock(blockId) {
-  const body = document.getElementById('body_' + blockId);
-  const icon = document.getElementById('icon_' + blockId);
+  const body   = document.getElementById('body_' + blockId);
+  const icon   = document.getElementById('icon_' + blockId);
   const isOpen = body.classList.contains('open');
   body.classList.toggle('open', !isOpen);
   icon.textContent = isOpen ? '▼' : '▲';
 }
 
-// ── NO UPDATE ──
 function toggleNoUpdate(blockId) {
-  const cb = document.getElementById('noupdate_' + blockId);
+  const cb    = document.getElementById('noupdate_' + blockId);
   const block = document.getElementById(blockId);
   const lines = document.getElementById('lines_' + blockId);
-  const dot = document.getElementById('dot_' + blockId);
+  const dot   = document.getElementById('dot_' + blockId);
 
   if (cb.checked) {
-    block.className = 'recruiter-block no-update-block';
-    dot.className = 'status-dot no-upd';
-    lines.style.opacity = '0.3';
+    block.className           = 'recruiter-block no-update-block';
+    dot.className             = 'status-dot no-upd';
+    lines.style.opacity       = '0.3';
     lines.style.pointerEvents = 'none';
   } else {
-    block.className = 'recruiter-block active';
-    dot.className = 'status-dot active';
-    lines.style.opacity = '1';
+    block.className           = 'recruiter-block active';
+    dot.className             = 'status-dot active';
+    lines.style.opacity       = '1';
     lines.style.pointerEvents = 'auto';
   }
   recalc();
 }
 
-// ── DONE BLOCK ──
 function doneBlock(blockId) {
   const block = document.getElementById(blockId);
-  const body = document.getElementById('body_' + blockId);
-  const icon = document.getElementById('icon_' + blockId);
-  const dot = document.getElementById('dot_' + blockId);
-  const cb = document.getElementById('noupdate_' + blockId);
+  const body  = document.getElementById('body_' + blockId);
+  const icon  = document.getElementById('icon_' + blockId);
+  const dot   = document.getElementById('dot_' + blockId);
+  const cb    = document.getElementById('noupdate_' + blockId);
 
   if (!cb.checked) {
     block.className = 'recruiter-block done';
-    dot.className = 'status-dot done';
+    dot.className   = 'status-dot done';
   }
-
   body.classList.remove('open');
   icon.textContent = '▼';
   recalc();
@@ -726,13 +825,13 @@ function getAllData() {
   const result = [];
 
   blocks.forEach(block => {
-    const id = block.id;
-    const name = (document.getElementById('name_' + id)?.value || '').trim();
+    const id       = block.id;
+    const name     = (document.getElementById('name_' + id)?.value || '').trim();
     const noUpdate = document.getElementById('noupdate_' + id)?.checked || false;
-    const lines = [];
+    const lines    = [];
 
     block.querySelectorAll('.account-line').forEach(line => {
-      const inputs = line.querySelectorAll('input');
+      const inputs  = line.querySelectorAll('input');
       const acc     = inputs[0].value.trim();
       const offer   = parseInt(inputs[1].value) || 0;
       const ops     = parseInt(inputs[2].value) || 0;
@@ -752,8 +851,7 @@ function getAllData() {
 function recalc() {
   const data = getAllData();
   let totalOffers = 0, totalOPS = 0, totalPOC = 0, totalHR = 0;
-  let activeRecruiters = 0;
-  let maxOffers = 0;
+  let activeRecruiters = 0, maxOffers = 0;
   let topNames = [];
   const accountMap = {};
 
@@ -779,12 +877,8 @@ function recalc() {
       }
     });
 
-    if (recOffers > maxOffers) {
-      maxOffers = recOffers;
-      topNames = [rec.name];
-    } else if (recOffers === maxOffers && recOffers > 0) {
-      topNames.push(rec.name);
-    }
+    if (recOffers > maxOffers) { maxOffers = recOffers; topNames = [rec.name]; }
+    else if (recOffers === maxOffers && recOffers > 0) topNames.push(rec.name);
 
     updateBadges(rec);
   });
@@ -797,7 +891,7 @@ function recalc() {
   document.getElementById('s-top').textContent        =
     topNames.length ? topNames.join(' · ') + (maxOffers > 0 ? ` (${maxOffers})` : '') : '—';
 
-  const grid = document.getElementById('breakdownGrid');
+  const grid    = document.getElementById('breakdownGrid');
   const entries = Object.values(accountMap).filter(a => (a.offer + a.ops + a.poc + a.hr) > 0);
 
   if (entries.length === 0) {
@@ -814,7 +908,6 @@ function recalc() {
   }
 }
 
-// ── UPDATE MINI BADGES ──
 function updateBadges(rec) {
   const badgeContainer = document.getElementById('badges_' + rec.id);
   if (!badgeContainer) return;
@@ -835,18 +928,18 @@ function updateBadges(rec) {
   badgeContainer.innerHTML = html;
 }
 
-// ── GENERATE / CALCULATE ──
+// ── GENERATE TEAMS POST ──
 function generatePost() {
-  const data = getAllData();
+  const data    = getAllData();
   const dateStr = today.toLocaleDateString('en-GB', {
     weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
   });
 
   let totalOffers = 0, totalOPS = 0, totalPOC = 0, totalHR = 0;
   let maxOffers = 0;
-  let topNames = [];
+  let topNames  = [];
   const accountMap = {};
-  let postLines = [];
+  let postLines    = [];
 
   data.forEach(rec => {
     if (!rec.name) return;
@@ -908,14 +1001,8 @@ function generatePost() {
   });
 
   const sep = '─'.repeat(42);
-
-  let post = `📋 DAILY RECRUITMENT UPDATE\n`;
-  post += `${dateStr}\n`;
-  post += `${sep}\n\n`;
-
-  post += `👥 TEAM UPDATES\n`;
-  post += postLines.join('\n') + '\n';
-
+  let post  = `📋 DAILY RECRUITMENT UPDATE\n${dateStr}\n${sep}\n\n`;
+  post += `👥 TEAM UPDATES\n` + postLines.join('\n') + '\n';
   post += `\n📊 BY ACCOUNT\n`;
   Object.values(accountMap).forEach(a => {
     const parts = [];
@@ -940,17 +1027,107 @@ function generatePost() {
   }
 
   post += `\n${sep}\n`;
- /* post += `Created by Sayyad · Senior Recruitment Specialist`;*/
-
   document.getElementById('postBox').textContent = post;
 }
 
-// ── COPY POST ──
+// ── COPY TEAMS POST ──
 function copyPost() {
   const text = document.getElementById('postBox').textContent;
   if (!text || text.startsWith('Click')) return;
   navigator.clipboard.writeText(text).then(() => {
     const el = document.getElementById('copyOk');
+    el.style.opacity = '1';
+    setTimeout(() => el.style.opacity = '0', 2500);
+  });
+}
+
+// ── GENERATE EXCEL EXPORT ──
+function generateExcelExport() {
+  const data = getAllData();
+
+  const readableDate = today.toLocaleDateString('en-GB', {
+    weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
+  });
+  const excelDate = today.toLocaleDateString('en-GB', {
+    day: '2-digit', month: '2-digit', year: 'numeric'
+  });
+
+  const accountSet   = new Set();
+  const recruiterMap = {};
+
+  data.forEach(rec => {
+    if (!rec.name || rec.noUpdate) return;
+    rec.lines.forEach(l => {
+      if (!l.acc || l.offer === 0) return;
+      accountSet.add(l.acc.trim());
+      if (!recruiterMap[rec.name]) recruiterMap[rec.name] = {};
+      if (!recruiterMap[rec.name][l.acc.trim()]) recruiterMap[rec.name][l.acc.trim()] = 0;
+      recruiterMap[rec.name][l.acc.trim()] += l.offer;
+    });
+  });
+
+  const accounts   = [...accountSet];
+  const recruiters = Object.keys(recruiterMap);
+
+  if (recruiters.length === 0 || accounts.length === 0) {
+    document.getElementById('excelBox').textContent =
+      'No offer data found. Please enter offers and click "Calculate Totals" first.';
+    return;
+  }
+
+  const COL_NAME  = Math.max(12, ...recruiters.map(r => r.length)) + 2;
+  const COL_ACC   = 8;
+  const COL_TOTAL = 13;
+  const pad = (str, len) => String(str).padEnd(len, ' ');
+
+  let header = pad('Recruiter', COL_NAME);
+  accounts.forEach(a => { header += '\t' + pad(a, COL_ACC); });
+  header += '\t' + pad('Daily Total', COL_TOTAL);
+
+  const colDayTotals = new Array(accounts.length).fill(0);
+  let dayGrandTotal  = 0;
+  const rows         = [];
+
+  recruiters.forEach(recName => {
+    let recDailyTotal = 0;
+    let row = pad(recName, COL_NAME);
+
+    accounts.forEach((acc, i) => {
+      const val = recruiterMap[recName][acc] || 0;
+      recDailyTotal   += val;
+      colDayTotals[i] += val;
+      row += '\t' + pad(val > 0 ? val : '-', COL_ACC);
+    });
+
+    dayGrandTotal += recDailyTotal;
+    row += '\t' + pad(recDailyTotal, COL_TOTAL);
+    rows.push(row);
+  });
+
+  let totalRow = pad('Day Total', COL_NAME);
+  colDayTotals.forEach(t => { totalRow += '\t' + pad(t, COL_ACC); });
+  totalRow += '\t' + pad(dayGrandTotal, COL_TOTAL);
+
+  const sepLen = COL_NAME + accounts.length * (COL_ACC + 1) + COL_TOTAL + 2;
+  const sep    = '─'.repeat(sepLen);
+
+  let output = '';
+  output += `Daily Offers — ${readableDate}\t${excelDate}\n`;
+  output += `${sep}\n`;
+  output += `${header}\n`;
+  rows.forEach(r => { output += r + '\n'; });
+  output += `${sep}\n`;
+  output += `${totalRow}\n`;
+
+  document.getElementById('excelBox').textContent = output;
+}
+
+// ── COPY EXCEL EXPORT ──
+function copyExcel() {
+  const text = document.getElementById('excelBox').textContent;
+  if (!text || text.startsWith('No offer') || text.startsWith('Click')) return;
+  navigator.clipboard.writeText(text).then(() => {
+    const el = document.getElementById('copyOkExcel');
     el.style.opacity = '1';
     setTimeout(() => el.style.opacity = '0', 2500);
   });
