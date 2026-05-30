@@ -189,7 +189,6 @@
 
   .block-header:hover { background: rgba(75,75,249,0.1); }
 
-  /* ── SEARCHABLE DROPDOWN ── */
   .recruiter-select-wrap {
     position: relative;
     flex: 1;
@@ -557,7 +556,6 @@
 
 <footer>
   Created by <span>Sayyad</span> · Senior Recruitment Specialist
- 
 </footer>
 
 <script>
@@ -614,8 +612,6 @@ function addRecruiter() {
   div.innerHTML = `
     <div class="block-header" onclick="toggleBlock('${id}')">
       <div class="status-dot active" id="dot_${id}"></div>
-
-      <!-- Searchable Dropdown -->
       <div class="recruiter-select-wrap" onclick="event.stopPropagation()">
         <input
           class="recruiter-search-input"
@@ -628,7 +624,6 @@ function addRecruiter() {
         />
         <div class="recruiter-dropdown" id="dropdown_${id}"></div>
       </div>
-
       <div class="block-badges" id="badges_${id}"></div>
       <span class="collapse-icon" id="icon_${id}">▲</span>
     </div>
@@ -657,15 +652,11 @@ function openDropdown(blockId) {
   const query    = (document.getElementById('name_' + blockId)?.value || '').toLowerCase().trim();
   const dropdown = document.getElementById('dropdown_' + blockId);
 
-  // Close all others first
   document.querySelectorAll('.recruiter-dropdown').forEach(d => {
     if (d.id !== 'dropdown_' + blockId) d.classList.remove('open');
   });
 
-  // Get already used names
   const usedNames = getUsedNames(blockId);
-
-  // Filter list
   const filtered = RECRUITER_NAMES.filter(name =>
     name.toLowerCase().includes(query) && !usedNames.includes(name)
   );
@@ -699,8 +690,7 @@ function renderDropdown(blockId, names, query) {
 
   dropdown.innerHTML = names.map(name => {
     const highlighted = query
-      ? name.replace(new RegExp(`(${escapeRegex(query)})`, 'gi'),
-          '<mark>$1</mark>')
+      ? name.replace(new RegExp(`(${escapeRegex(query)})`, 'gi'), '<mark>$1</mark>')
       : name;
     return `<div class="dropdown-item" onclick="selectRecruiter('${blockId}', '${name}')">${highlighted}</div>`;
   }).join('');
@@ -713,7 +703,7 @@ function selectRecruiter(blockId, name) {
   recalc();
 }
 
-// ── GET ALREADY USED NAMES (prevent duplicates) ──
+// ── GET ALREADY USED NAMES ──
 function getUsedNames(currentBlockId) {
   const used = [];
   document.querySelectorAll('.recruiter-block').forEach(block => {
@@ -724,7 +714,7 @@ function getUsedNames(currentBlockId) {
   return used;
 }
 
-// ── ESCAPE REGEX SPECIAL CHARS ──
+// ── ESCAPE REGEX ──
 function escapeRegex(str) {
   return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
@@ -1045,87 +1035,70 @@ function copyPost() {
 function generateExcelExport() {
   const data = getAllData();
 
+  // Sort recruiter names alphabetically (case-insensitive — matches Excel A-Z sort)
+  const sortedRecruiters = [...RECRUITER_NAMES].sort((a, b) =>
+    a.toLowerCase().localeCompare(b.toLowerCase())
+  );
+
+  // Build map: recruiter name → total offers for the day
+  const offerMap = {};
+  data.forEach(rec => {
+    if (!rec.name || rec.noUpdate) return;
+    let recTotal = 0;
+    rec.lines.forEach(l => { recTotal += l.offer || 0; });
+    offerMap[rec.name.trim()] = (offerMap[rec.name.trim()] || 0) + recTotal;
+  });
+
+  // Format date for Excel column header (e.g. 1/5/2026)
+  const excelDate = `${today.getMonth() + 1}/${today.getDate()}/${today.getFullYear()}`;
+
+  // Readable date for display
   const readableDate = today.toLocaleDateString('en-GB', {
     weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
   });
-  const excelDate = today.toLocaleDateString('en-GB', {
-    day: '2-digit', month: '2-digit', year: 'numeric'
+
+  // Build copyable column: date + one number per recruiter in alphabetical order
+  const copyLines = [];
+  copyLines.push(excelDate);
+
+  let dayTotal = 0;
+
+  sortedRecruiters.forEach(name => {
+    const offers = offerMap[name] || 0;
+    dayTotal += offers;
+    copyLines.push(`${offers}`);
   });
 
-  const accountSet   = new Set();
-  const recruiterMap = {};
+  // Build visual preview (with names for verification)
+  const sep = '─'.repeat(40);
+  let preview = '';
+  preview += `📊 Excel Export — ${readableDate}\n`;
+  preview += `${sep}\n`;
+  preview += `📋 Copyable Column (paste into Excel):\n\n`;
+  preview += copyLines.join('\n');
+  preview += `\n\n${sep}\n`;
+  preview += `Day Total: ${dayTotal}\n`;
+  preview += `${sep}\n\n`;
 
-  data.forEach(rec => {
-    if (!rec.name || rec.noUpdate) return;
-    rec.lines.forEach(l => {
-      if (!l.acc || l.offer === 0) return;
-      accountSet.add(l.acc.trim());
-      if (!recruiterMap[rec.name]) recruiterMap[rec.name] = {};
-      if (!recruiterMap[rec.name][l.acc.trim()]) recruiterMap[rec.name][l.acc.trim()] = 0;
-      recruiterMap[rec.name][l.acc.trim()] += l.offer;
-    });
+  // Verification list (names + numbers — for your eyes only)
+  preview += `👁️ Verification (DO NOT paste — reference only):\n\n`;
+  preview += `Date: ${excelDate}\n`;
+  sortedRecruiters.forEach(name => {
+    const offers = offerMap[name] || 0;
+    preview += `${name.padEnd(22)} → ${offers}\n`;
   });
 
-  const accounts   = [...accountSet];
-  const recruiters = Object.keys(recruiterMap);
+  document.getElementById('excelBox').textContent = preview;
 
-  if (recruiters.length === 0 || accounts.length === 0) {
-    document.getElementById('excelBox').textContent =
-      'No offer data found. Please enter offers and click "Calculate Totals" first.';
-    return;
-  }
-
-  const COL_NAME  = Math.max(12, ...recruiters.map(r => r.length)) + 2;
-  const COL_ACC   = 8;
-  const COL_TOTAL = 13;
-  const pad = (str, len) => String(str).padEnd(len, ' ');
-
-  let header = pad('Recruiter', COL_NAME);
-  accounts.forEach(a => { header += '\t' + pad(a, COL_ACC); });
-  header += '\t' + pad('Daily Total', COL_TOTAL);
-
-  const colDayTotals = new Array(accounts.length).fill(0);
-  let dayGrandTotal  = 0;
-  const rows         = [];
-
-  recruiters.forEach(recName => {
-    let recDailyTotal = 0;
-    let row = pad(recName, COL_NAME);
-
-    accounts.forEach((acc, i) => {
-      const val = recruiterMap[recName][acc] || 0;
-      recDailyTotal   += val;
-      colDayTotals[i] += val;
-      row += '\t' + pad(val > 0 ? val : '-', COL_ACC);
-    });
-
-    dayGrandTotal += recDailyTotal;
-    row += '\t' + pad(recDailyTotal, COL_TOTAL);
-    rows.push(row);
-  });
-
-  let totalRow = pad('Day Total', COL_NAME);
-  colDayTotals.forEach(t => { totalRow += '\t' + pad(t, COL_ACC); });
-  totalRow += '\t' + pad(dayGrandTotal, COL_TOTAL);
-
-  const sepLen = COL_NAME + accounts.length * (COL_ACC + 1) + COL_TOTAL + 2;
-  const sep    = '─'.repeat(sepLen);
-
-  let output = '';
-  output += `Daily Offers — ${readableDate}\t${excelDate}\n`;
-  output += `${sep}\n`;
-  output += `${header}\n`;
-  rows.forEach(r => { output += r + '\n'; });
-  output += `${sep}\n`;
-  output += `${totalRow}\n`;
-
-  document.getElementById('excelBox').textContent = output;
+  // Store clean paste data for copy function
+  document.getElementById('excelBox').dataset.copyData = copyLines.join('\n');
 }
 
 // ── COPY EXCEL EXPORT ──
 function copyExcel() {
-  const text = document.getElementById('excelBox').textContent;
-  if (!text || text.startsWith('No offer') || text.startsWith('Click')) return;
+  const box = document.getElementById('excelBox');
+  const text = box.dataset.copyData || '';
+  if (!text) return;
   navigator.clipboard.writeText(text).then(() => {
     const el = document.getElementById('copyOkExcel');
     el.style.opacity = '1';
