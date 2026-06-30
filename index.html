@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Recruitment Daily Tracker</title>
+<title>Daily Update — Foundever Recruitment</title>
 <style>
-  :root {
+:root {
     --fd-indigo: #4b4bf9;
     --fd-midnight: #09092d;
     --fd-white: #ffffff;
@@ -14,1097 +14,1371 @@
     --fd-coral: #ff8d96;
     --fd-lavender: #bfa1ff;
     --fd-mint: #8bf0bb;
-    --fd-card: #0f0f35;
-    --fd-card2: #13133d;
-    --fd-border: rgba(75,75,249,0.25);
+    --fd-card: #f8f8fc;
+    --fd-card2: #f3f3f7;
+    --fd-border: rgba(75,75,249,0.18);
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
   body {
-    background: var(--fd-midnight);
-    color: var(--fd-white);
+    background: var(--fd-white);
+    color: var(--fd-midnight);
     font-family: 'Segoe UI', sans-serif;
     min-height: 100vh;
-    padding: 0 0 60px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 16px 60px;
   }
 
   .header {
-    background: var(--fd-card);
-    border-bottom: 2px solid var(--fd-indigo);
-    padding: 18px 28px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: sticky;
-    top: 0;
-    z-index: 100;
+    width: 100%;
+    max-width: 620px;
+    text-align: center;
+    padding: 32px 0 20px;
   }
 
-  .header h1 { font-size: 1.2rem; font-weight: 700; }
+  .header h1 { font-size: 1.4rem; font-weight: 800; margin-bottom: 4px; }
   .header h1 span { color: var(--fd-indigo); }
-
-  .header-right {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
+  .header .sub { font-size: 0.8rem; color: #666; margin-bottom: 8px; }
 
   .date-badge {
+    display: inline-block;
     background: var(--fd-indigo);
     color: var(--fd-white);
-    padding: 5px 14px;
+    padding: 5px 16px;
     border-radius: 20px;
-    font-size: 0.8rem;
+    font-size: 0.78rem;
     font-weight: 600;
   }
 
-  .summary-section { padding: 20px 28px 0; }
-
-  .summary-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-    gap: 10px;
-    margin-bottom: 16px;
-  }
-
-  .card {
+  /* ── UPDATE TYPE SECTION ── */
+  .update-type-section {
     background: var(--fd-card);
     border: 1px solid var(--fd-border);
-    border-radius: 12px;
-    padding: 14px 12px;
-    text-align: center;
+    border-radius: 16px;
+    padding: 18px 20px;
+    width: 100%;
+    max-width: 620px;
+    margin-top: 16px;
   }
 
-  .card .c-label {
-    font-size: 0.68rem;
-    color: var(--fd-lavender);
+  .ut-title {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--fd-indigo);
     text-transform: uppercase;
     letter-spacing: 0.06em;
-    margin-bottom: 6px;
+    margin-bottom: 12px;
   }
 
-  .card .c-value {
-    font-size: 1.7rem;
-    font-weight: 800;
-    color: var(--fd-white);
-    line-height: 1;
-  }
-
-  .card.c-offers { border-color: var(--fd-mint); }
-  .card.c-offers .c-value { color: var(--fd-mint); }
-  .card.c-top { border-color: var(--fd-lemon); }
-  .card.c-top .c-value { color: var(--fd-lemon); font-size: 0.95rem; padding-top: 4px; line-height: 1.3; }
-
-  .breakdown-grid {
+  .ut-option {
     display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: 8px;
-  }
-
-  .acc-chip {
-    background: var(--fd-card2);
-    border: 1px solid var(--fd-border);
-    border-radius: 20px;
-    padding: 5px 12px;
-    font-size: 0.75rem;
-    color: var(--fd-white);
-    display: flex;
-    gap: 8px;
-    align-items: center;
-  }
-
-  .acc-chip .acc-name { color: var(--fd-lavender); font-weight: 600; }
-  .acc-chip .acc-stat { color: var(--fd-mint); }
-
-  .main { padding: 20px 28px; }
-
-  .toolbar {
-    display: flex;
+    align-items: flex-start;
     gap: 10px;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
-  }
-
-  button {
-    border: none;
+    padding: 10px 14px;
+    border-radius: 10px;
+    margin-bottom: 8px;
     cursor: pointer;
-    font-size: 0.83rem;
-    font-weight: 600;
-    border-radius: 8px;
-    padding: 9px 18px;
-    transition: opacity 0.18s, transform 0.1s;
-    font-family: 'Segoe UI', sans-serif;
+    border: 1px solid transparent;
+    transition: border-color 0.2s, background 0.2s;
   }
 
-  button:hover { opacity: 0.85; }
-  button:active { transform: scale(0.97); }
-
-  .btn-primary  { background: var(--fd-indigo);  color: var(--fd-white); }
-  .btn-mint     { background: var(--fd-mint);     color: var(--fd-midnight); }
-  .btn-lemon    { background: var(--fd-lemon);    color: var(--fd-midnight); }
-  .btn-coral    { background: var(--fd-coral);    color: var(--fd-midnight); }
-  .btn-lavender { background: var(--fd-lavender); color: var(--fd-midnight); }
-  .btn-ghost    {
-    background: transparent;
-    color: var(--fd-lavender);
-    border: 1px solid var(--fd-border);
+  .ut-option.active {
+    border-color: var(--fd-indigo);
+    background: rgba(75,75,249,0.06);
   }
 
-  .btn-sm {
-    padding: 5px 10px;
-    font-size: 0.75rem;
-    border-radius: 6px;
+  .ut-option.locked {
+    opacity: 0.35;
+    cursor: not-allowed;
+    pointer-events: none;
   }
 
-  .recruiter-list {
+  .ut-option input[type="radio"] {
+    accent-color: var(--fd-indigo);
+    margin-top: 3px;
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+  }
+
+  .ut-label-wrap { flex: 1; }
+
+  .ut-label {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--fd-midnight);
     display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin-bottom: 24px;
+    align-items: center;
+    gap: 6px;
   }
 
-  .recruiter-block {
+  .ut-lock-icon { color: #aaa; font-size: 0.75rem; }
+
+  .ut-desc {
+    font-size: 0.78rem;
+    color: #888;
+    font-style: italic;
+    margin-top: 4px;
+    line-height: 1.4;
+  }
+
+  .ut-lock-hint {
+    font-size: 0.7rem;
+    color: #bbb;
+    margin-top: 3px;
+  }
+
+  .ut-date-display {
+    text-align: center;
+    margin-top: 8px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--fd-indigo);
+  }
+
+  .ut-date-display .night-note {
+    font-size: 0.72rem;
+    color: #888;
+    font-weight: 400;
+  }
+
+  /* ── WARNING BANNER ── */
+  .warning-banner {
+    display: none;
+    background: #fff5f5;
+    border: 1px solid rgba(255,141,150,0.3);
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin-top: 10px;
+    font-size: 0.8rem;
+    color: #d4545e;
+    line-height: 1.5;
+    font-weight: 600;
+  }
+
+  .warning-banner.show { display: block; }
+
+  /* ── FORM CARD ── */
+  .form-card {
     background: var(--fd-card);
     border: 1px solid var(--fd-border);
-    border-radius: 14px;
-    overflow: hidden;
-    transition: border-color 0.2s;
+    border-radius: 16px;
+    padding: 24px 20px;
+    width: 100%;
+    max-width: 620px;
+    margin-top: 12px;
   }
 
-  .recruiter-block.active         { border-color: var(--fd-indigo); }
-  .recruiter-block.done           { border-color: var(--fd-mint); opacity: 0.75; }
-  .recruiter-block.no-update-block{ border-color: var(--fd-coral); opacity: 0.6; }
+  .form-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--fd-indigo);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 8px;
+    display: block;
+  }
 
-  .block-header {
+  .recruiter-select, .acc-select {
+    width: 100%;
+    background: var(--fd-white);
+    border: 1px solid var(--fd-border);
+    color: var(--fd-midnight);
+    font-size: 0.95rem;
+    font-family: 'Segoe UI', sans-serif;
+    font-weight: 600;
+    border-radius: 10px;
+    padding: 12px 14px;
+    outline: none;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    margin-bottom: 20px;
+  }
+
+  .acc-select { margin-bottom: 0; font-size: 0.88rem; }
+
+  .recruiter-select option, .acc-select option {
+    background: var(--fd-white);
+    color: var(--fd-midnight);
+  }
+
+  .recruiter-select:focus, .acc-select:focus { border-color: var(--fd-indigo); }
+
+  /* Language select styling */
+  .lang-select {
+    background: var(--fd-white);
+    border: 1px solid var(--fd-border);
+    color: var(--fd-midnight);
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 6px 10px;
+    border-radius: 8px;
+    outline: none;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+
+  .lang-select option {
+    background: var(--fd-white);
+    color: var(--fd-midnight);
+  }
+
+  .lang-select:focus { border-color: var(--fd-indigo); }
+
+  .lang-custom-input {
+    background: var(--fd-white);
+    border: 1px solid var(--fd-border);
+    color: var(--fd-midnight);
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 6px 10px;
+    border-radius: 8px;
+    outline: none;
+    display: none;
+    width: 100px;
+  }
+
+  .lang-custom-input::placeholder { color: #bbb; font-weight: 400; }
+  .lang-custom-input:focus { border-color: var(--fd-indigo); }
+
+  .lang-wrap {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .lang-label {
+    font-size: 0.7rem;
+    color: #888;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  /* ── NO UPDATE ── */
+  .no-update-wrap {
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 12px 16px;
-    cursor: pointer;
-    user-select: none;
-    background: var(--fd-card2);
+    margin-bottom: 20px;
+    padding: 10px 14px;
+    background: #fff5f5;
+    border: 1px solid rgba(255,141,150,0.25);
+    border-radius: 10px;
   }
 
-  .block-header:hover { background: rgba(75,75,249,0.1); }
+  .no-update-wrap input { accent-color: var(--fd-coral); width: 16px; height: 16px; cursor: pointer; }
+  .no-update-wrap label { font-size: 0.85rem; color: #d4545e; cursor: pointer; font-weight: 600; }
 
-  .recruiter-select-wrap {
-    position: relative;
-    flex: 1;
-    min-width: 160px;
+  /* ── ACCOUNT BLOCKS ── */
+  .account-section { margin-bottom: 16px; }
+
+  .account-block {
+    background: var(--fd-white);
+    border: 1px solid var(--fd-border);
+    border-radius: 12px;
+    padding: 14px;
+    margin-bottom: 10px;
+    transition: border-color 0.3s;
   }
 
-  .recruiter-search-input {
+  .account-block:focus-within { border-color: rgba(75,75,249,0.5); }
+  .account-block.error-block { border-color: var(--fd-coral) !important; animation: shake 0.4s ease; }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-4px); }
+    40%, 80% { transform: translateX(4px); }
+  }
+
+  .acc-top-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+  }
+
+  .acc-select-wrap { flex: 1; min-width: 150px; }
+  .acc-select-wrap select { width: 100%; }
+
+  .acc-custom-input {
     width: 100%;
     background: transparent;
     border: none;
     border-bottom: 1px solid var(--fd-border);
-    color: var(--fd-white);
-    font-size: 0.95rem;
-    font-weight: 700;
-    font-family: 'Segoe UI', sans-serif;
-    outline: none;
-    padding: 2px 4px;
-    cursor: text;
-  }
-
-  .recruiter-search-input::placeholder { color: rgba(255,255,255,0.3); font-weight: 400; }
-  .recruiter-search-input:focus { border-bottom-color: var(--fd-indigo); }
-
-  .recruiter-dropdown {
-    position: absolute;
-    top: calc(100% + 6px);
-    left: 0;
-    min-width: 220px;
-    background: #1a1a4e;
-    border: 1px solid var(--fd-indigo);
-    border-radius: 10px;
-    overflow: hidden;
-    z-index: 999;
-    display: none;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.5);
-    max-height: 220px;
-    overflow-y: auto;
-  }
-
-  .recruiter-dropdown.open { display: block; }
-
-  .dropdown-item {
-    padding: 9px 14px;
-    font-size: 0.85rem;
-    color: var(--fd-white);
-    cursor: pointer;
-    transition: background 0.15s;
-  }
-
-  .dropdown-item:hover,
-  .dropdown-item.highlighted {
-    background: rgba(75,75,249,0.3);
-    color: var(--fd-lavender);
-  }
-
-  .dropdown-item mark {
-    background: transparent;
-    color: var(--fd-mint);
-    font-weight: 700;
-  }
-
-  .dropdown-empty {
-    padding: 9px 14px;
-    font-size: 0.8rem;
-    color: rgba(255,255,255,0.3);
-    font-style: italic;
-  }
-
-  .block-badges {
-    display: flex;
-    gap: 6px;
-    align-items: center;
-    flex-wrap: wrap;
-  }
-
-  .mini-badge {
-    font-size: 0.7rem;
-    padding: 2px 8px;
-    border-radius: 10px;
+    color: var(--fd-midnight);
+    font-size: 0.88rem;
     font-weight: 600;
-    background: rgba(75,75,249,0.2);
-    color: #a0a0ff;
+    font-family: 'Segoe UI', sans-serif;
+    padding: 8px 6px;
+    outline: none;
+    display: none;
   }
 
-  .mini-badge.offer-badge {
-    background: rgba(139,240,187,0.2);
-    color: var(--fd-mint);
-  }
+  .acc-custom-input::placeholder { color: #bbb; font-weight: 400; }
+  .acc-custom-input:focus { border-bottom-color: var(--fd-indigo); }
 
-  .collapse-icon { color: var(--fd-lavender); font-size: 0.8rem; margin-left: auto; flex-shrink: 0; }
-
-  .status-dot {
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    background: var(--fd-border);
-    flex-shrink: 0;
-  }
-
-  .status-dot.active { background: var(--fd-indigo); }
-  .status-dot.done   { background: var(--fd-mint); }
-  .status-dot.no-upd { background: var(--fd-coral); }
-
-  .block-body { padding: 14px 16px; display: none; }
-  .block-body.open { display: block; }
-
-  .no-update-row-top {
+  .acc-meta-row {
     display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 14px;
-  }
-
-  .no-update-row-top label { font-size: 0.8rem; color: var(--fd-coral); cursor: pointer; }
-  .no-update-row-top input[type=checkbox] { accent-color: var(--fd-coral); width: 14px; height: 14px; cursor: pointer; }
-
-  .account-lines {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    margin-bottom: 12px;
-  }
-
-  .account-line {
-    display: flex;
-    gap: 6px;
+    gap: 10px;
     align-items: center;
     flex-wrap: wrap;
-    background: var(--fd-card2);
-    border: 1px solid var(--fd-border);
-    border-radius: 10px;
-    padding: 8px 10px;
-    transition: border-color 0.2s;
   }
 
-  .account-line:focus-within { border-color: rgba(75,75,249,0.6); }
+  .start-date-wrap {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
 
-  .acc-input {
-    background: transparent;
-    border: none;
-    border-bottom: 1px solid var(--fd-border);
-    color: var(--fd-white);
-    font-size: 0.83rem;
+  .start-date-label {
+    font-size: 0.7rem;
+    color: #888;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .start-date-input {
+    background: var(--fd-white);
+    border: 1px solid var(--fd-border);
+    color: var(--fd-midnight);
     font-family: 'Segoe UI', sans-serif;
-    outline: none;
-    width: 90px;
-    padding: 2px 4px;
-  }
-
-  .acc-input::placeholder { color: rgba(255,255,255,0.3); }
-  .acc-input:focus { border-bottom-color: var(--fd-indigo); }
-
-  .stage-group { display: flex; gap: 4px; align-items: center; flex-wrap: wrap; }
-  .stage-item  { display: flex; align-items: center; gap: 3px; }
-  .stage-label { font-size: 0.68rem; color: var(--fd-lavender); white-space: nowrap; }
-
-  .stage-input {
-    width: 36px;
-    background: rgba(75,75,249,0.1);
-    border: 1px solid var(--fd-border);
-    border-radius: 5px;
-    color: var(--fd-white);
     font-size: 0.8rem;
-    font-family: 'Segoe UI', sans-serif;
-    text-align: center;
-    padding: 3px 2px;
+    padding: 6px 10px;
+    border-radius: 8px;
     outline: none;
-    transition: border-color 0.2s, background 0.2s;
+    cursor: pointer;
   }
 
-  .stage-input:focus { border-color: var(--fd-indigo); background: rgba(75,75,249,0.2); }
-  .stage-input::-webkit-inner-spin-button,
-  .stage-input::-webkit-outer-spin-button { -webkit-appearance: none; }
+  .start-date-input:focus { border-color: var(--fd-indigo); }
+  .start-date-input.error-input { border-color: var(--fd-coral) !important; background: #fff5f5; }
 
-  .comment-input {
-    background: transparent;
-    border: none;
-    border-bottom: 1px dashed var(--fd-border);
-    color: rgba(255,255,255,0.6);
-    font-size: 0.75rem;
-    font-family: 'Segoe UI', sans-serif;
-    font-style: italic;
-    outline: none;
-    flex: 1;
-    min-width: 80px;
-    padding: 2px 4px;
-  }
-
-  .comment-input::placeholder { color: rgba(255,255,255,0.2); }
-  .comment-input:focus { border-bottom-color: rgba(75,75,249,0.5); color: var(--fd-white); }
-
-  .remove-line-btn {
+  .remove-acc-btn {
     background: transparent;
     border: none;
     color: var(--fd-coral);
     cursor: pointer;
-    font-size: 0.9rem;
-    padding: 2px 4px;
+    font-size: 1rem;
+    padding: 4px 6px;
+    border-radius: 6px;
     line-height: 1;
-    border-radius: 4px;
     flex-shrink: 0;
   }
 
-  .remove-line-btn:hover { background: rgba(255,141,150,0.15); }
+  .remove-acc-btn:hover { background: #fff0f1; }
 
-  .block-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-
-  .post-section { margin-top: 8px; }
-
-  .section-label {
-    font-size: 0.75rem;
-    font-weight: 700;
-    color: var(--fd-lavender);
-    text-transform: uppercase;
-    letter-spacing: 0.07em;
-    margin-bottom: 10px;
+  .inline-error {
+    font-size: 0.72rem;
+    color: #d4545e;
+    margin-top: 4px;
+    display: none;
+    font-weight: 600;
   }
 
-  .post-box {
-    background: var(--fd-card);
-    border: 1px solid var(--fd-border);
-    border-radius: 12px;
-    padding: 16px;
-    font-size: 0.82rem;
-    line-height: 1.75;
-    color: #c8c8ff;
-    white-space: pre-wrap;
-    font-family: 'Courier New', monospace;
-    max-height: 380px;
-    overflow-y: auto;
-    margin-bottom: 10px;
-  }
+  .inline-error.show { display: block; }
 
-  .excel-export-box {
-    background: var(--fd-card);
-    border: 1px solid rgba(139,240,187,0.3);
-    border-radius: 12px;
-    padding: 16px;
-    font-size: 0.82rem;
-    line-height: 1.75;
-    color: #b0ffda;
-    white-space: pre-wrap;
-    font-family: 'Courier New', monospace;
-    max-height: 320px;
-    overflow-y: auto;
-    margin-bottom: 10px;
-  }
-
-  .copy-row {
+  .stage-row {
     display: flex;
-    align-items: center;
-    gap: 12px;
+    gap: 6px;
     flex-wrap: wrap;
+    margin-bottom: 8px;
   }
 
-  .copy-ok {
+  .stage-item { display: flex; align-items: center; gap: 4px; }
+  .stage-label { font-size: 0.7rem; color: #888; font-weight: 600; white-space: nowrap; }
+
+  .stage-input {
+    width: 44px;
+    background: var(--fd-light-grey);
+    border: 1px solid var(--fd-border);
+    border-radius: 6px;
+    color: var(--fd-midnight);
+    font-size: 0.85rem;
+    font-family: 'Segoe UI', sans-serif;
+    text-align: center;
+    padding: 6px 4px;
+    outline: none;
+  }
+
+  .stage-input:focus { border-color: var(--fd-indigo); background: rgba(75,75,249,0.08); }
+  .stage-input::-webkit-inner-spin-button,
+  .stage-input::-webkit-outer-spin-button { -webkit-appearance: none; }
+
+  .comment-input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 1px dashed var(--fd-border);
+    color: #666;
+    font-size: 0.8rem;
+    font-family: 'Segoe UI', sans-serif;
+    font-style: italic;
+    outline: none;
+    padding: 4px 6px;
+  }
+
+  .comment-input::placeholder { color: #ccc; }
+  .comment-input:focus { border-bottom-color: rgba(75,75,249,0.5); color: var(--fd-midnight); }
+
+  /* ── ADD ACCOUNT BUTTON ── */
+  .add-acc-btn {
+    width: 100%;
+    background: rgba(75,75,249,0.04);
+    border: 1px dashed var(--fd-indigo);
+    color: var(--fd-indigo);
+    padding: 12px 16px;
+    border-radius: 10px;
+    font-size: 0.88rem;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: 'Segoe UI', sans-serif;
+    margin-bottom: 20px;
+    transition: background 0.2s, border-color 0.2s;
+  }
+
+  .add-acc-btn:hover {
+    background: rgba(75,75,249,0.1);
+    border-color: var(--fd-indigo);
+  }
+
+  /* ── SUBMIT ── */
+  .submit-btn {
+    width: 100%;
+    background: var(--fd-indigo);
+    color: var(--fd-white);
+    border: none;
+    border-radius: 10px;
+    padding: 14px;
+    font-size: 1rem;
+    font-weight: 800;
+    font-family: 'Segoe UI', sans-serif;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.1s;
+  }
+
+  .submit-btn:hover { opacity: 0.9; }
+  .submit-btn:active { transform: scale(0.98); }
+  .submit-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .status-msg {
+    text-align: center;
+    margin-top: 14px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    min-height: 24px;
+    line-height: 1.5;
+  }
+
+  .status-msg.error   { color: #d4545e; }
+  .status-msg.sending { color: var(--fd-indigo); }
+
+  /* ── SUCCESS CARD ── */
+  .success-card {
+    display: none;
+    background: var(--fd-white);
+    border: 2px solid var(--fd-indigo);
+    border-radius: 16px;
+    padding: 40px 24px;
+    text-align: center;
+    width: 100%;
+    max-width: 620px;
+    margin-top: 16px;
+    box-shadow: 0 4px 24px rgba(75,75,249,0.1);
+  }
+
+  .success-card .big-check { font-size: 3rem; margin-bottom: 12px; }
+  .success-card h2 { color: var(--fd-indigo); font-size: 1.15rem; margin-bottom: 8px; }
+  .success-card .motivational { color: #888; font-size: 0.9rem; margin-bottom: 16px; line-height: 1.5; }
+
+  .success-card .summary {
+    color: #666;
     font-size: 0.78rem;
-    color: var(--fd-mint);
-    opacity: 0;
-    transition: opacity 0.3s;
+    margin-bottom: 20px;
+    line-height: 1.6;
+    text-align: left;
+    background: var(--fd-light-grey);
+    border-radius: 10px;
+    padding: 12px 16px;
   }
 
-  .divider { height: 1px; background: var(--fd-border); margin: 20px 0; }
+  .success-card button {
+    background: var(--fd-indigo);
+    color: var(--fd-white);
+    border: none;
+    border-radius: 8px;
+    padding: 10px 24px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: 'Segoe UI', sans-serif;
+  }
+
+  /* Override notice styling */
+  .override-notice {
+    display: inline-block;
+    background: #fffce6;
+    border: 1px solid rgba(249,239,119,0.5);
+    color: #8a7a00;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 8px;
+    margin-bottom: 12px;
+  }
 
   footer {
     text-align: center;
-    padding: 16px;
+    padding: 24px 16px;
     font-size: 0.7rem;
-    color: rgba(255,255,255,0.2);
+    color: #ccc;
   }
 
   footer span { color: var(--fd-indigo); font-weight: 700; }
 
   ::-webkit-scrollbar { width: 5px; }
-  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-track { background: var(--fd-light-grey); }
   ::-webkit-scrollbar-thumb { background: var(--fd-indigo); border-radius: 10px; }
 
   @media (max-width: 600px) {
-    .header { padding: 14px 16px; }
-    .summary-section, .main { padding: 14px 16px; }
-    .account-line { flex-direction: column; align-items: flex-start; }
-    .stage-group { flex-wrap: wrap; }
+    .acc-top-row { flex-direction: column; align-items: stretch; }
+    .acc-meta-row { flex-direction: column; align-items: stretch; }
+    .start-date-wrap { margin-top: 6px; }
+    .lang-wrap { margin-top: 6px; }
+    .stage-row { gap: 4px; }
+    .stage-input { width: 40px; padding: 5px 2px; }
   }
-</style>
+
+  /* ✅ NEW: Theme Toggle Button */
+  .theme-toggle {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid var(--fd-border);
+    background: var(--fd-card);
+    cursor: pointer;
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s, border-color 0.3s, transform 0.2s;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+  }
+
+  .theme-toggle:hover {
+    transform: scale(1.1);
+    border-color: var(--fd-indigo);
+  }
+
+  .theme-toggle-icon {
+    font-size: 1.1rem;
+    line-height: 1;
+    transition: transform 0.3s;
+  }
+
+  .theme-toggle:hover .theme-toggle-icon {
+    transform: rotate(20deg);
+  }
+
+  /* ✅ NEW: Dark Mode — All Overrides */
+  body.dark-mode {
+    --fd-card: #0f0f35;
+    --fd-card2: #13133d;
+    --fd-border: rgba(75,75,249,0.25);
+    background: var(--fd-midnight);
+    color: var(--fd-white);
+  }
+
+  body.dark-mode .header .sub { color: var(--fd-lavender); }
+
+  body.dark-mode .ut-title,
+  body.dark-mode .form-label { color: var(--fd-lavender); }
+
+  body.dark-mode .ut-label { color: var(--fd-white); }
+  body.dark-mode .ut-desc { color: var(--fd-lavender); }
+  body.dark-mode .ut-lock-icon { color: var(--fd-lavender); }
+  body.dark-mode .ut-lock-hint { color: rgba(255,255,255,0.25); }
+  body.dark-mode .ut-date-display { color: var(--fd-mint); }
+  body.dark-mode .ut-date-display .night-note { color: var(--fd-lavender); }
+
+  body.dark-mode .ut-option.active { background: rgba(75,75,249,0.08); }
+
+  body.dark-mode .warning-banner {
+    background: rgba(255,141,150,0.08);
+    color: var(--fd-coral);
+  }
+
+  body.dark-mode .recruiter-select,
+  body.dark-mode .acc-select {
+    background: #13133d;
+    color: var(--fd-white);
+  }
+
+  body.dark-mode .recruiter-select option,
+  body.dark-mode .acc-select option {
+    background: #0f0f35;
+    color: var(--fd-white);
+  }
+
+  body.dark-mode .lang-select {
+    background: rgba(75,75,249,0.1);
+    color: var(--fd-white);
+  }
+
+  body.dark-mode .lang-select option {
+    background: #0f0f35;
+    color: var(--fd-white);
+  }
+
+  body.dark-mode .lang-custom-input {
+    background: rgba(75,75,249,0.1);
+    color: var(--fd-white);
+  }
+
+  body.dark-mode .lang-custom-input::placeholder { color: rgba(255,255,255,0.3); }
+  body.dark-mode .lang-label { color: var(--fd-lavender); }
+  body.dark-mode .start-date-label { color: var(--fd-lavender); }
+
+  body.dark-mode .start-date-input {
+    background: rgba(75,75,249,0.1);
+    color: var(--fd-white);
+  }
+
+  body.dark-mode .start-date-input.error-input { background: rgba(255,141,150,0.1); }
+
+  body.dark-mode .no-update-wrap {
+    background: rgba(255,141,150,0.08);
+    border-color: rgba(255,141,150,0.2);
+  }
+
+  body.dark-mode .no-update-wrap label { color: var(--fd-coral); }
+
+  body.dark-mode .account-block { background: #13133d; }
+
+  body.dark-mode .acc-custom-input { color: var(--fd-white); }
+  body.dark-mode .acc-custom-input::placeholder { color: rgba(255,255,255,0.3); }
+
+  body.dark-mode .stage-label { color: var(--fd-lavender); }
+
+  body.dark-mode .stage-input {
+    background: rgba(75,75,249,0.1);
+    color: var(--fd-white);
+  }
+
+  body.dark-mode .stage-input:focus { background: rgba(75,75,249,0.2); }
+
+  body.dark-mode .comment-input { color: rgba(255,255,255,0.7); }
+  body.dark-mode .comment-input::placeholder { color: rgba(255,255,255,0.2); }
+  body.dark-mode .comment-input:focus { color: var(--fd-white); }
+
+  body.dark-mode .inline-error { color: var(--fd-coral); }
+
+  body.dark-mode .add-acc-btn {
+    background: rgba(75,75,249,0.08);
+    color: var(--fd-lavender);
+  }
+
+  body.dark-mode .add-acc-btn:hover {
+    background: rgba(75,75,249,0.15);
+    border-color: var(--fd-lavender);
+  }
+
+  body.dark-mode .submit-btn {
+    background: var(--fd-mint);
+    color: var(--fd-midnight);
+  }
+
+  body.dark-mode .status-msg.error { color: var(--fd-coral); }
+  body.dark-mode .status-msg.sending { color: var(--fd-lavender); }
+
+  body.dark-mode .success-card {
+    background: #0f0f35;
+    border-color: var(--fd-mint);
+    box-shadow: none;
+  }
+
+  body.dark-mode .success-card h2 { color: var(--fd-mint); }
+  body.dark-mode .success-card .motivational { color: var(--fd-lavender); }
+
+  body.dark-mode .success-card .summary {
+    color: rgba(255,255,255,0.6);
+    background: rgba(75,75,249,0.06);
+  }
+
+  body.dark-mode .override-notice {
+    background: rgba(249,239,119,0.1);
+    border-color: rgba(249,239,119,0.3);
+    color: var(--fd-lemon);
+  }
+
+  body.dark-mode .remove-acc-btn:hover { background: rgba(255,141,150,0.15); }
+
+  body.dark-mode footer { color: rgba(255,255,255,0.2); }
+
+  body.dark-mode .theme-toggle {
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+  }
+
+  body.dark-mode ::-webkit-scrollbar-track { background: transparent; }
+  /* ✅ END: Dark Mode Overrides */
+  </style>
 </head>
 <body>
 
-<!-- HEADER -->
+<!-- ✅ NEW: Dark Mode Toggle Button -->
+<button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode">
+  <span class="theme-toggle-icon">🌙</span>
+</button>
+
 <div class="header">
-  <h1>📋 Daily Recruitment <span>Tracker</span></h1>
-  <div class="header-right">
-    <div class="date-badge" id="dateBadge"></div>
-  </div>
+  <h1>📝 Daily <span>Update</span></h1>
+  <p class="sub">Submit your recruitment numbers</p>
+  <div class="date-badge" id="dateBadge"></div>
 </div>
 
-<!-- SUMMARY -->
-<div class="summary-section">
-  <div class="summary-grid">
-    <div class="card">
-      <div class="c-label">Recruiters</div>
-      <div class="c-value" id="s-recruiters">0</div>
-    </div>
-    <div class="card c-offers">
-      <div class="c-label">Total Offers</div>
-      <div class="c-value" id="s-offers">0</div>
-    </div>
-    <div class="card">
-      <div class="c-label">Total OPS</div>
-      <div class="c-value" id="s-ops">0</div>
-    </div>
-    <div class="card">
-      <div class="c-label">Total POC</div>
-      <div class="c-value" id="s-poc">0</div>
-    </div>
-    <div class="card">
-      <div class="c-label">Total HR</div>
-      <div class="c-value" id="s-hr">0</div>
-    </div>
-    <div class="card c-top">
-      <div class="c-label">⭐ Top Contributor</div>
-      <div class="c-value" id="s-top">—</div>
+<!-- ── UPDATE TYPE ── -->
+<div class="update-type-section" id="updateTypeSection">
+  <div class="ut-title">📌 Update Type</div>
+
+  <div class="ut-option active" id="utMorning" onclick="selectUpdateType('Morning')">
+    <input type="radio" name="updateType" value="Morning" checked id="radioMorning"/>
+    <div class="ut-label-wrap">
+      <div class="ut-label">
+        <span id="morningIcon">☀️</span>
+        <span id="morningTitle">Morning Briefing (Main Reference)</span>
+        <span class="ut-lock-icon" id="morningLock" style="display:none">🔒</span>
+      </div>
+      <div class="ut-desc" id="morningDesc">Here you add your new offers or updates that will be used as a reference for the briefing call</div>
+      <div class="ut-lock-hint" id="morningHint" style="display:none">Closed after 2:00 PM</div>
     </div>
   </div>
 
-  <div class="section-label">Account Breakdown</div>
-  <div class="breakdown-grid" id="breakdownGrid">
-    <span style="font-size:0.75rem; color:rgba(255,255,255,0.25)">No data yet...</span>
+  <div class="ut-option" id="utMidday" onclick="selectUpdateType('Midday')">
+    <input type="radio" name="updateType" value="Midday" id="radioMidday"/>
+    <div class="ut-label-wrap">
+      <div class="ut-label">
+        🕐 Midday Update (Progress Check)
+        <span class="ut-lock-icon" id="middayLock" style="display:none">🔒</span>
+      </div>
+      <div class="ut-desc">Here you add new offers that weren't mentioned in the briefing or OPS interviews that will be booked today</div>
+      <div class="ut-lock-hint" id="middayHint" style="display:none"></div>
+    </div>
   </div>
-  <div class="divider"></div>
+
+  <div class="warning-banner" id="warningBanner">
+  ⚠️ Please note that (Offers / OPS) from yesterday's Updates call are discarded and you need to add them here again if they are still valid.
 </div>
 
-<!-- MAIN -->
-<div class="main">
+  <div class="ut-date-display" id="utDateDisplay"></div>
+</div>
 
-  <div class="toolbar">
-    <button class="btn-primary" onclick="addRecruiter()">＋ Add Recruiter</button>
-    <button class="btn-mint"    onclick="generatePost()">🧮 Calculate Totals</button>
+<!-- ── MAIN FORM ── -->
+<div class="form-card" id="formCard">
+  <label class="form-label">Your Name</label>
+  <select class="recruiter-select" id="recruiterName">
+    <option value="">— Select your name —</option>
+  </select>
+
+  <div class="no-update-wrap">
+    <input type="checkbox" id="noUpdateCheck" onchange="toggleNoUpdate()"/>
+    <label for="noUpdateCheck">I have no updates till now</label>
   </div>
 
-  <div class="recruiter-list" id="recruiterList"></div>
-
-  <!-- Teams Post -->
-  <div class="post-section">
-    <div class="section-label">Teams Post Preview</div>
-    <div class="post-box" id="postBox">Click "Calculate Totals" to preview...</div>
-    <div class="copy-row">
-      <button class="btn-lemon" onclick="copyPost()">📋 Copy for Teams</button>
-      <span class="copy-ok" id="copyOk">✅ Copied!</span>
-    </div>
+  <div id="accountSection" class="account-section">
+    <label class="form-label">Accounts & Numbers</label>
+    <div id="accountList"></div>
+    <button class="add-acc-btn" onclick="addAccount()">＋ Add Another Account</button>
   </div>
 
-  <div class="divider"></div>
+  <button class="submit-btn" id="submitBtn" onclick="submitForm()">✓ Submit My Update</button>
+  <div class="status-msg" id="statusMsg"></div>
+</div>
 
-  <!-- Excel Export -->
-  <div class="post-section">
-    <div class="section-label">📊 Excel Export</div>
-    <div class="excel-export-box" id="excelBox">Click "Calculate Totals" first, then "Generate Excel Export"...</div>
-    <div class="copy-row">
-      <button class="btn-lavender" onclick="generateExcelExport()">📊 Generate Excel Export</button>
-      <button class="btn-mint"     onclick="copyExcel()">📋 Copy for Excel</button>
-      <span class="copy-ok" id="copyOkExcel">✅ Copied!</span>
-    </div>
-  </div>
-
+<!-- ── SUCCESS ── -->
+<div class="success-card" id="successCard">
+  <div class="big-check">✅</div>
+  <div class="override-notice" id="overrideNotice" style="display:none">🔄 Updated your previous submission</div>
+  <h2 id="successTitle">Updates are sent!</h2>
+  <p class="motivational" id="successMotivational"></p>
+  <div class="summary" id="successSummary" style="display:none;"></div>
+  <button onclick="resetForm()">Submit Another Update</button>
 </div>
 
 <footer>
-  Created by <span>Sayyad</span> · Senior Recruitment Specialist
+  Foundever Recruitment · Built by <span>Sayyad</span>
 </footer>
 
 <script>
-// ── RECRUITER NAMES LIST (hardcoded) ──
+// ═══════════════════════════════════════════════
+// CONFIGURATION
+// ═══════════════════════════════════════════════
+const API_URL = 'https://script.google.com/macros/s/AKfycbwAQTLPIu4VGbKbRxnuX3ZlOp4HxMaA_NFtdsW3wLBCIlb3qSshlUvawKig5AZmywLweg/exec';
+
 const RECRUITER_NAMES = [
-  "Ahmed Amr",
-  "Yussuf Hesham",
-  "Rana Maawad",
-  "Omar Kassem",
-  "Aya Mohamed",
-  "Ahmed Abdelfatah",
-  "Veronica Nady",
-  "Sarah Mohamed",
-  "Nouran Abdelmonem",
-  "Nada Bassyouni",
-  "Yara Sabry",
-  "Ahmed Shahat",
-  "Habiba Waleed",
-  "Mostafa Alaaeldin",
-  "Mahmoud Elshwadfey",
-  "Aya Mostafa",
-  "Ghaidaa Hussien",
-  "Shahd Abdelghafar",
-  "Gamela Abdelqader",
-  "Farah Khalid",
-  "Ahmed Ashraf",
-  "Yassmin Ashraf",
-  "Nour Waleed"
+  "Ahmed Amr","Yussuf Hesham","Rana Maawad","Omar Kassem","Aya Mohamed",
+  "Ahmed Abdelfatah","Veronica Nady","Sarah Mohamed","Nouran Abdelmonem",
+  "Nada Bassyouni","Yara Sabry","Ahmed Shahat","Habiba Waleed",
+  "Mostafa Alaaeldin","Mahmoud Elshwadfey","Aya Mostafa","Ghaidaa Hussien",
+  "Shahd Abdelghafar","Gamela Abdelqader","Farah Khalid","Ahmed Ashraf",
+  "Yassmin Ashraf","Nour Waleed"
 ];
 
-// ── DATE ──
-const today = new Date();
-document.getElementById('dateBadge').textContent = today.toLocaleDateString('en-GB', {
-  weekday: 'short', day: 'numeric', month: 'short', year: 'numeric'
+const LANGUAGES = ["English", "German", "Italian", "French", "Spanish", "Dutch"];
+
+let ACCOUNT_NAMES = [];
+
+// ═══════════════════════════════════════════════
+// ROTATING SUCCESS MESSAGES
+// ═══════════════════════════════════════════════
+const SUCCESS_MESSAGES = {
+  noUpdate: [
+    "No worries ya {name}, u still have a chance to shine 💪",
+    "All good ya {name}! Tomorrow's a brand new day to crush it 🌅",
+    "No stress ya {name}! The best is yet to come 🚀"
+  ],
+  zeroOffers: [
+    "Great job ya {name} :) Every move counts! 💪",
+    "Nice work ya {name}! The pipeline is building 🔧",
+    "Keep pushing ya {name}! Offers are coming soon 🎯"
+  ],
+  oneOffer: [
+    "Great job ya {name} :) Keep it going! 🔥",
+    "One offer locked in ya {name}! Solid work 💪",
+    "That's how it starts ya {name}! Keep the streak going ⚡"
+  ],
+  twoOffers: [
+    "Two offers ya {name}?! You're on fire! 🚀",
+    "Double offers ya {name}! That's how it's done! 💥",
+    "Ya {name}, two offers in one day? Absolute machine! ⚡"
+  ],
+  threeOrMore: [
+    "{name} is UNSTOPPABLE! {count} offers — absolute legend! 🏆",
+    "{count} offers?! Ya {name} you're carrying the whole team today! 👑",
+    "Someone stop {name}! {count} offers, Recruitment Expert! 🎯"
+  ]
+};
+
+function getSuccessMessage(recruiter, totalOffers, isNoUpdate) {
+  let pool;
+  if (isNoUpdate)             pool = SUCCESS_MESSAGES.noUpdate;
+  else if (totalOffers === 0) pool = SUCCESS_MESSAGES.zeroOffers;
+  else if (totalOffers === 1) pool = SUCCESS_MESSAGES.oneOffer;
+  else if (totalOffers === 2) pool = SUCCESS_MESSAGES.twoOffers;
+  else                        pool = SUCCESS_MESSAGES.threeOrMore;
+
+  const msg = pool[Math.floor(Math.random() * pool.length)];
+  return msg.replace(/{name}/g, recruiter).replace(/{count}/g, totalOffers);
+}
+
+// ═══════════════════════════════════════════════
+// TIME-BASED UPDATE TYPE
+// ═══════════════════════════════════════════════
+let currentUpdateType = 'Morning';
+let submissionDate    = '';
+
+function initUpdateType() {
+  const now  = new Date();
+  const hour = now.getHours();
+
+  const morningOpt    = document.getElementById('utMorning');
+  const middayOpt     = document.getElementById('utMidday');
+  const morningLock   = document.getElementById('morningLock');
+  const morningHint   = document.getElementById('morningHint');
+  const middayLock    = document.getElementById('middayLock');
+  const middayHint    = document.getElementById('middayHint');
+  const warningBanner = document.getElementById('warningBanner');
+  const morningTitle  = document.getElementById('morningTitle');
+  const morningIcon   = document.getElementById('morningIcon');
+  const dateDisplay   = document.getElementById('utDateDisplay');
+
+  morningOpt.classList.remove('locked', 'active');
+  middayOpt.classList.remove('locked', 'active');
+  morningLock.style.display = 'none';
+  morningHint.style.display = 'none';
+  middayLock.style.display  = 'none';
+  middayHint.style.display  = 'none';
+  warningBanner.classList.remove('show');
+
+  submissionDate = formatDateISO(now);
+
+  if (hour < 13) {
+    currentUpdateType = 'Morning';
+    morningOpt.classList.add('active');
+    document.getElementById('radioMorning').checked = true;
+
+    middayOpt.classList.add('locked');
+    middayLock.style.display = 'inline';
+    middayHint.style.display = 'block';
+    middayHint.textContent   = 'Opens at 1:00 PM';
+    warningBanner.classList.add('show');
+
+    morningIcon.textContent  = '☀️';
+    morningTitle.textContent = 'Morning Briefing (Main Reference)';
+
+  } else {
+    currentUpdateType = 'Midday';
+    middayOpt.classList.add('active');
+    document.getElementById('radioMidday').checked = true;
+
+    morningOpt.classList.add('locked');
+    morningLock.style.display = 'inline';
+    morningHint.style.display = 'block';
+    morningHint.textContent   = 'Closed after 1:00 PM';
+  }
+
+  dateDisplay.innerHTML = `📅 ${formatDateReadable(now)}`;
+  document.getElementById('dateBadge').textContent = formatDateReadable(now);
+}
+
+function selectUpdateType(type) {
+  const opt = document.getElementById(type === 'Morning' ? 'utMorning' : 'utMidday');
+  if (opt.classList.contains('locked')) return;
+
+  currentUpdateType = type;
+  document.getElementById('utMorning').classList.toggle('active', type === 'Morning');
+  document.getElementById('utMidday').classList.toggle('active', type === 'Midday');
+  document.getElementById('radioMorning').checked = (type === 'Morning');
+  document.getElementById('radioMidday').checked  = (type === 'Midday');
+}
+
+// ═══════════════════════════════════════════════
+// DATE HELPERS
+// ═══════════════════════════════════════════════
+function formatDateISO(d) {
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+
+function formatDateReadable(d) {
+  return d.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+}
+
+// ═══════════════════════════════════════════════
+// FEATURE 1: REMEMBER RECRUITER NAME
+// ═══════════════════════════════════════════════
+const sel = document.getElementById('recruiterName');
+RECRUITER_NAMES.sort((a, b) => a.localeCompare(b)).forEach(name => {
+  const opt = document.createElement('option');
+  opt.value = name;
+  opt.textContent = name;
+  sel.appendChild(opt);
 });
 
-let blockCount = 0;
+const savedRecruiter = localStorage.getItem('recruiterName');
+if (savedRecruiter && RECRUITER_NAMES.includes(savedRecruiter)) {
+  sel.value = savedRecruiter;
+}
 
-// ── CLOSE ALL DROPDOWNS ──
-document.addEventListener('click', (e) => {
-  if (!e.target.closest('.recruiter-select-wrap')) {
-    document.querySelectorAll('.recruiter-dropdown').forEach(d => d.classList.remove('open'));
+sel.addEventListener('change', function() {
+  if (this.value) localStorage.setItem('recruiterName', this.value);
+});
+
+// ═══════════════════════════════════════════════
+// FEATURE 3: PREVENT NEGATIVES + EMPTY DEFAULTS
+// ═══════════════════════════════════════════════
+document.addEventListener('input', function(e) {
+  if (e.target.classList.contains('stage-input')) {
+    const val = parseInt(e.target.value);
+    if (val < 0) e.target.value = '';
   }
 });
 
-// ── ADD RECRUITER BLOCK ──
-function addRecruiter() {
-  blockCount++;
-  const id = 'block_' + blockCount;
-  const div = document.createElement('div');
-  div.className = 'recruiter-block active';
-  div.id = id;
-
-  div.innerHTML = `
-    <div class="block-header" onclick="toggleBlock('${id}')">
-      <div class="status-dot active" id="dot_${id}"></div>
-      <div class="recruiter-select-wrap" onclick="event.stopPropagation()">
-        <input
-          class="recruiter-search-input"
-          type="text"
-          placeholder="Search recruiter..."
-          id="name_${id}"
-          autocomplete="off"
-          oninput="filterDropdown('${id}')"
-          onfocus="openDropdown('${id}')"
-        />
-        <div class="recruiter-dropdown" id="dropdown_${id}"></div>
-      </div>
-      <div class="block-badges" id="badges_${id}"></div>
-      <span class="collapse-icon" id="icon_${id}">▲</span>
-    </div>
-    <div class="block-body open" id="body_${id}">
-      <div class="no-update-row-top">
-        <input type="checkbox" id="noupdate_${id}" onchange="toggleNoUpdate('${id}')"/>
-        <label for="noupdate_${id}">No update today</label>
-      </div>
-      <div class="account-lines" id="lines_${id}"></div>
-      <div class="block-actions">
-        <button class="btn-ghost btn-sm" onclick="addLine('${id}')">＋ Add Account</button>
-        <button class="btn-mint  btn-sm" onclick="doneBlock('${id}')">✓ Done</button>
-        <button class="btn-coral btn-sm" onclick="removeBlock('${id}')">✕ Remove</button>
-      </div>
-    </div>
-  `;
-
-  document.getElementById('recruiterList').appendChild(div);
-  addLine(id);
-  openDropdown(id);
-  document.getElementById('name_' + id).focus();
-}
-
-// ── OPEN DROPDOWN ──
-function openDropdown(blockId) {
-  const query    = (document.getElementById('name_' + blockId)?.value || '').toLowerCase().trim();
-  const dropdown = document.getElementById('dropdown_' + blockId);
-
-  document.querySelectorAll('.recruiter-dropdown').forEach(d => {
-    if (d.id !== 'dropdown_' + blockId) d.classList.remove('open');
-  });
-
-  const usedNames = getUsedNames(blockId);
-  const filtered = RECRUITER_NAMES.filter(name =>
-    name.toLowerCase().includes(query) && !usedNames.includes(name)
-  );
-
-  renderDropdown(blockId, filtered, query);
-  dropdown.classList.add('open');
-}
-
-// ── FILTER DROPDOWN ──
-function filterDropdown(blockId) {
-  const query    = (document.getElementById('name_' + blockId)?.value || '').toLowerCase().trim();
-  const usedNames = getUsedNames(blockId);
-
-  const filtered = RECRUITER_NAMES.filter(name =>
-    name.toLowerCase().includes(query) && !usedNames.includes(name)
-  );
-
-  renderDropdown(blockId, filtered, query);
-  document.getElementById('dropdown_' + blockId).classList.add('open');
-  recalc();
-}
-
-// ── RENDER DROPDOWN ITEMS ──
-function renderDropdown(blockId, names, query) {
-  const dropdown = document.getElementById('dropdown_' + blockId);
-
-  if (names.length === 0) {
-    dropdown.innerHTML = `<div class="dropdown-empty">No matches found</div>`;
-    return;
+document.addEventListener('focus', function(e) {
+  if (e.target.classList.contains('stage-input')) {
+    if (e.target.value === '0') e.target.value = '';
   }
+}, true);
 
-  dropdown.innerHTML = names.map(name => {
-    const highlighted = query
-      ? name.replace(new RegExp(`(${escapeRegex(query)})`, 'gi'), '<mark>$1</mark>')
-      : name;
-    return `<div class="dropdown-item" onclick="selectRecruiter('${blockId}', '${name}')">${highlighted}</div>`;
-  }).join('');
+// ═══════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════
+initUpdateType();
+loadAccounts();
+
+async function loadAccounts() {
+  try {
+    const response = await fetch(`${API_URL}?action=accounts`);
+    const json = await response.json();
+    if (json.status === 'ok' && json.accounts) {
+      ACCOUNT_NAMES = json.accounts.sort((a, b) => a.localeCompare(b));
+    }
+  } catch (err) {
+    console.warn('Could not load accounts from API.', err);
+  }
+  addAccount();
 }
 
-// ── SELECT RECRUITER FROM DROPDOWN ──
-function selectRecruiter(blockId, name) {
-  document.getElementById('name_' + blockId).value = name;
-  document.getElementById('dropdown_' + blockId).classList.remove('open');
-  recalc();
-}
-
-// ── GET ALREADY USED NAMES ──
-function getUsedNames(currentBlockId) {
-  const used = [];
-  document.querySelectorAll('.recruiter-block').forEach(block => {
-    if (block.id === currentBlockId) return;
-    const val = document.getElementById('name_' + block.id)?.value?.trim();
-    if (val) used.push(val);
+// ✅ CHANGED: Removed custom account option
+function buildAccountOptions() {
+  let html = '<option value="">— Select account —</option>';
+  ACCOUNT_NAMES.forEach(name => {
+    html += `<option value="${name}">${name}</option>`;
   });
-  return used;
+  return html;
 }
 
-// ── ESCAPE REGEX ──
-function escapeRegex(str) {
-  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+function buildLanguageOptions() {
+  let html = '';
+  LANGUAGES.forEach(lang => {
+    html += `<option value="${lang}" ${lang === 'English' ? 'selected' : ''}>${lang}</option>`;
+  });
+  html += '<option value="__other__">Other...</option>';
+  return html;
 }
 
-// ── ADD ACCOUNT LINE ──
-function addLine(blockId) {
-  const lineId    = 'line_' + blockId + '_' + Date.now();
-  const container = document.getElementById('lines_' + blockId);
-  const div       = document.createElement('div');
-  div.className   = 'account-line';
-  div.id          = lineId;
+function handleLanguageSelect(selectEl) {
+  const wrap = selectEl.closest('.lang-wrap');
+  const customInput = wrap.querySelector('.lang-custom-input');
+
+  if (selectEl.value === '__other__') {
+    customInput.style.display = 'block';
+    customInput.focus();
+  } else {
+    customInput.style.display = 'none';
+    customInput.value = '';
+  }
+}
+
+function getLanguage(block) {
+  const selectEl = block.querySelector('.lang-select');
+  const customInput = block.querySelector('.lang-custom-input');
+  if (selectEl.value === '__other__') {
+    const custom = customInput.value.trim();
+    return custom || 'English';
+  }
+  return selectEl.value;
+}
+
+// ✅ CHANGED: Removed custom account input + removed onchange from select
+function addAccount() {
+  const list = document.getElementById('accountList');
+  const div  = document.createElement('div');
+  div.className = 'account-block';
 
   div.innerHTML = `
-    <input class="acc-input" type="text" placeholder="Account..." oninput="recalc()" />
-    <div class="stage-group">
+    <div class="acc-top-row">
+      <div class="acc-select-wrap">
+        <select class="acc-select">
+          ${buildAccountOptions()}
+        </select>
+      </div>
+      <button class="remove-acc-btn" onclick="removeAccount(this)" title="Remove">✕</button>
+    </div>
+    <div class="acc-meta-row">
+      <div class="start-date-wrap">
+        <span class="start-date-label">Start Date</span>
+        <input class="start-date-input" type="date" />
+      </div>
+      <div class="lang-wrap">
+        <span class="lang-label">Language</span>
+        <select class="lang-select" onchange="handleLanguageSelect(this)">
+          ${buildLanguageOptions()}
+        </select>
+        <input class="lang-custom-input" type="text" placeholder="Type..." />
+      </div>
+    </div>
+    <div class="inline-error date-error"> WRONG START DATE ...😵 صحصح وركز كدا</div>
+    <div class="inline-error duplicate-error">⚠️ Duplicate! Same account + start date + language already added above</div>
+    <div class="stage-row">
       <div class="stage-item">
-        <span class="stage-label">Offer</span>
-        <input class="stage-input" type="number" min="0" value="0" oninput="recalc()" onwheel="this.blur()"/>
+        <span class="stage-label">Offers</span>
+        <input class="stage-input" type="number" min="0" placeholder="0" onwheel="this.blur()"/>
+      </div>
+      <div class="stage-item">
+        <span class="stage-label">Pending Feedback</span>
+        <input class="stage-input" type="number" min="0" placeholder="0" onwheel="this.blur()"/>
       </div>
       <div class="stage-item">
         <span class="stage-label">OPS</span>
-        <input class="stage-input" type="number" min="0" value="0" oninput="recalc()" onwheel="this.blur()"/>
+        <input class="stage-input" type="number" min="0" placeholder="0" onwheel="this.blur()"/>
       </div>
       <div class="stage-item">
         <span class="stage-label">POC</span>
-        <input class="stage-input" type="number" min="0" value="0" oninput="recalc()" onwheel="this.blur()"/>
+        <input class="stage-input" type="number" min="0" placeholder="0" onwheel="this.blur()"/>
       </div>
       <div class="stage-item">
         <span class="stage-label">HR</span>
-        <input class="stage-input" type="number" min="0" value="0" oninput="recalc()" onwheel="this.blur()"/>
+        <input class="stage-input" type="number" min="0" placeholder="0" onwheel="this.blur()"/>
       </div>
     </div>
-    <input class="comment-input" type="text" placeholder="Comment..." oninput="recalc()"/>
-    <button class="remove-line-btn" onclick="removeLine('${lineId}')" title="Remove line">✕</button>
+    <input class="comment-input" type="text" placeholder="Optional comment..." />
   `;
 
-  container.appendChild(div);
-  div.querySelector('.acc-input').focus();
+  list.appendChild(div);
 }
 
-function removeLine(lineId) {
-  const el = document.getElementById(lineId);
-  if (el) { el.remove(); recalc(); }
+// ✅ CHANGED: Simplified — no custom account input handling needed
+function handleAccountSelect(selectEl) {
+  // No custom option anymore — nothing to handle
 }
 
-function removeBlock(blockId) {
-  const el = document.getElementById(blockId);
-  if (el) { el.remove(); recalc(); }
+// ✅ CHANGED: Simplified — always read from select directly
+function getAccountName(block) {
+  return block.querySelector('.acc-select').value;
 }
 
-function toggleBlock(blockId) {
-  const body   = document.getElementById('body_' + blockId);
-  const icon   = document.getElementById('icon_' + blockId);
-  const isOpen = body.classList.contains('open');
-  body.classList.toggle('open', !isOpen);
-  icon.textContent = isOpen ? '▼' : '▲';
+function removeAccount(btn) {
+  const block = btn.closest('.account-block');
+  const list  = document.getElementById('accountList');
+  if (list.children.length > 1) block.remove();
 }
 
-function toggleNoUpdate(blockId) {
-  const cb    = document.getElementById('noupdate_' + blockId);
-  const block = document.getElementById(blockId);
-  const lines = document.getElementById('lines_' + blockId);
-  const dot   = document.getElementById('dot_' + blockId);
-
-  if (cb.checked) {
-    block.className           = 'recruiter-block no-update-block';
-    dot.className             = 'status-dot no-upd';
-    lines.style.opacity       = '0.3';
-    lines.style.pointerEvents = 'none';
-  } else {
-    block.className           = 'recruiter-block active';
-    dot.className             = 'status-dot active';
-    lines.style.opacity       = '1';
-    lines.style.pointerEvents = 'auto';
-  }
-  recalc();
+function toggleNoUpdate() {
+  const checked = document.getElementById('noUpdateCheck').checked;
+  const section = document.getElementById('accountSection');
+  section.style.opacity       = checked ? '0.3' : '1';
+  section.style.pointerEvents = checked ? 'none' : 'auto';
 }
 
-function doneBlock(blockId) {
-  const block = document.getElementById(blockId);
-  const body  = document.getElementById('body_' + blockId);
-  const icon  = document.getElementById('icon_' + blockId);
-  const dot   = document.getElementById('dot_' + blockId);
-  const cb    = document.getElementById('noupdate_' + blockId);
+// ✅ CHANGED: Only future Mondays allowed (removed Tuesday)
+function isValidStartDate(dateStr) {
+  if (!dateStr) return false;
+  const d     = new Date(dateStr + 'T00:00:00');
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
 
-  if (!cb.checked) {
-    block.className = 'recruiter-block done';
-    dot.className   = 'status-dot done';
-  }
-  body.classList.remove('open');
-  icon.textContent = '▼';
-  recalc();
+  const day = d.getDay();
+
+  // Must be Monday only (day === 1)
+  if (day !== 1) return false;
+
+  // Must be a future date (not today or past)
+  if (d <= today) return false;
+
+  return true;
 }
 
-// ── GET ALL DATA ──
-function getAllData() {
-  const blocks = document.querySelectorAll('.recruiter-block');
-  const result = [];
-
-  blocks.forEach(block => {
-    const id       = block.id;
-    const name     = (document.getElementById('name_' + id)?.value || '').trim();
-    const noUpdate = document.getElementById('noupdate_' + id)?.checked || false;
-    const lines    = [];
-
-    block.querySelectorAll('.account-line').forEach(line => {
-      const inputs  = line.querySelectorAll('input');
-      const acc     = inputs[0].value.trim();
-      const offer   = parseInt(inputs[1].value) || 0;
-      const ops     = parseInt(inputs[2].value) || 0;
-      const poc     = parseInt(inputs[3].value) || 0;
-      const hr      = parseInt(inputs[4].value) || 0;
-      const comment = inputs[5].value.trim();
-      lines.push({ acc, offer, ops, poc, hr, comment });
-    });
-
-    result.push({ id, name, noUpdate, lines });
+function clearErrors() {
+  document.querySelectorAll('.account-block').forEach(block => {
+    block.classList.remove('error-block');
+    const dateInput = block.querySelector('.start-date-input');
+    if (dateInput) dateInput.classList.remove('error-input');
+    const dateError = block.querySelector('.date-error');
+    if (dateError) dateError.classList.remove('show');
+    const dupError = block.querySelector('.duplicate-error');
+    if (dupError) dupError.classList.remove('show');
   });
-
-  return result;
+  document.getElementById('statusMsg').textContent = '';
 }
 
-// ── RECALC ──
-function recalc() {
-  const data = getAllData();
-  let totalOffers = 0, totalOPS = 0, totalPOC = 0, totalHR = 0;
-  let activeRecruiters = 0, maxOffers = 0;
-  let topNames = [];
-  const accountMap = {};
+// ═══════════════════════════════════════════════
+// SUBMIT
+// ═══════════════════════════════════════════════
+async function submitForm() {
+  clearErrors();
 
-  data.forEach(rec => {
-    if (rec.noUpdate || !rec.name) return;
-    activeRecruiters++;
+  const recruiter = document.getElementById('recruiterName').value;
+  const noUpdate  = document.getElementById('noUpdateCheck').checked;
+  const statusMsg = document.getElementById('statusMsg');
+  const submitBtn = document.getElementById('submitBtn');
 
-    let recOffers = 0;
-    rec.lines.forEach(l => {
-      totalOffers += l.offer;
-      totalOPS    += l.ops;
-      totalPOC    += l.poc;
-      totalHR     += l.hr;
-      recOffers   += l.offer;
+  if (!recruiter) {
+    statusMsg.className   = 'status-msg error';
+    statusMsg.textContent = '😅 انت مين يا عم؟ اختار اسمك الأول';
+    return;
+  }
 
-      if (l.acc) {
-        const key = l.acc.toLowerCase();
-        if (!accountMap[key]) accountMap[key] = { display: l.acc, offer: 0, ops: 0, poc: 0, hr: 0 };
-        accountMap[key].offer += l.offer;
-        accountMap[key].ops   += l.ops;
-        accountMap[key].poc   += l.poc;
-        accountMap[key].hr    += l.hr;
+  const entries    = [];
+  let totalOffers  = 0;
+
+  if (noUpdate) {
+    entries.push({
+      date: submissionDate,
+      updatetype: currentUpdateType,
+      recruiter: recruiter,
+      account: '—',
+      language: 'English',
+      startdate: '',
+      offers: 0,
+      pendingfb: 0,
+      ops: 0,
+      poc: 0,
+      hr: 0,
+      comment: 'No update today'
+    });
+  } else {
+    const blocks  = document.querySelectorAll('.account-block');
+    let hasData   = false;
+    let hasError  = false;
+    let firstErrorBlock = null;
+
+    const seenCombos = new Set();
+
+    blocks.forEach(block => {
+      const accName    = getAccountName(block);
+      const startDate  = block.querySelector('.start-date-input').value;
+      const language   = getLanguage(block);
+      const inputs     = block.querySelectorAll('.stage-input');
+      const comment    = block.querySelector('.comment-input').value.trim();
+
+      const offers    = parseInt(inputs[0].value) || 0;
+      const pendingfb = parseInt(inputs[1].value) || 0;
+      const ops       = parseInt(inputs[2].value) || 0;
+      const poc       = parseInt(inputs[3].value) || 0;
+      const hr        = parseInt(inputs[4].value) || 0;
+
+      const hasNumbers = (offers + pendingfb + ops + poc + hr > 0 || comment);
+
+      if (accName && hasNumbers) {
+        if (!isValidStartDate(startDate)) {
+          hasError = true;
+          block.classList.add('error-block');
+          block.querySelector('.start-date-input').classList.add('error-input');
+          block.querySelector('.date-error').classList.add('show');
+          if (!firstErrorBlock) firstErrorBlock = block;
+          return;
+        }
+
+        const comboKey = `${accName.toLowerCase()}|${startDate}|${language.toLowerCase()}`;
+        if (seenCombos.has(comboKey)) {
+          hasError = true;
+          block.classList.add('error-block');
+          block.querySelector('.duplicate-error').classList.add('show');
+          if (!firstErrorBlock) firstErrorBlock = block;
+          return;
+        }
+        seenCombos.add(comboKey);
+
+        hasData = true;
+        totalOffers += offers;
+        entries.push({
+          date: submissionDate,
+          updatetype: currentUpdateType,
+          recruiter: recruiter,
+          account: accName,
+          language: language,
+          startdate: startDate,
+          offers, pendingfb, ops, poc, hr,
+          comment: comment
+        });
       }
     });
 
-    if (recOffers > maxOffers) { maxOffers = recOffers; topNames = [rec.name]; }
-    else if (recOffers === maxOffers && recOffers > 0) topNames.push(rec.name);
-
-    updateBadges(rec);
-  });
-
-  document.getElementById('s-recruiters').textContent = activeRecruiters;
-  document.getElementById('s-offers').textContent     = totalOffers;
-  document.getElementById('s-ops').textContent        = totalOPS;
-  document.getElementById('s-poc').textContent        = totalPOC;
-  document.getElementById('s-hr').textContent         = totalHR;
-  document.getElementById('s-top').textContent        =
-    topNames.length ? topNames.join(' · ') + (maxOffers > 0 ? ` (${maxOffers})` : '') : '—';
-
-  const grid    = document.getElementById('breakdownGrid');
-  const entries = Object.values(accountMap).filter(a => (a.offer + a.ops + a.poc + a.hr) > 0);
-
-  if (entries.length === 0) {
-    grid.innerHTML = `<span style="font-size:0.75rem;color:rgba(255,255,255,0.25)">No data yet...</span>`;
-  } else {
-    grid.innerHTML = entries.map(a => {
-      const parts = [];
-      if (a.offer) parts.push(`<span class="acc-stat">${a.offer} Offer</span>`);
-      if (a.ops)   parts.push(`<span class="acc-stat">${a.ops} OPS</span>`);
-      if (a.poc)   parts.push(`<span class="acc-stat">${a.poc} POC</span>`);
-      if (a.hr)    parts.push(`<span class="acc-stat">${a.hr} HR</span>`);
-      return `<div class="acc-chip"><span class="acc-name">${a.display}</span>${parts.join('')}</div>`;
-    }).join('');
-  }
-}
-
-function updateBadges(rec) {
-  const badgeContainer = document.getElementById('badges_' + rec.id);
-  if (!badgeContainer) return;
-
-  let totalOffer = 0, totalMoves = 0;
-  rec.lines.forEach(l => {
-    totalOffer += l.offer;
-    totalMoves += l.offer + l.ops + l.poc + l.hr;
-  });
-
-  let html = '';
-  if (rec.noUpdate) {
-    html = `<span class="mini-badge" style="color:var(--fd-coral);background:rgba(255,141,150,0.15)">No Update</span>`;
-  } else {
-    if (totalOffer > 0) html += `<span class="mini-badge offer-badge">${totalOffer} Offer${totalOffer>1?'s':''}</span>`;
-    if (totalMoves > 0) html += `<span class="mini-badge">${totalMoves} Moves</span>`;
-  }
-  badgeContainer.innerHTML = html;
-}
-
-// ── GENERATE TEAMS POST ──
-function generatePost() {
-  const data    = getAllData();
-  const dateStr = today.toLocaleDateString('en-GB', {
-    weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
-  });
-
-  let totalOffers = 0, totalOPS = 0, totalPOC = 0, totalHR = 0;
-  let maxOffers = 0;
-  let topNames  = [];
-  const accountMap = {};
-  let postLines    = [];
-
-  data.forEach(rec => {
-    if (!rec.name) return;
-
-    if (rec.noUpdate) {
-      postLines.push(`  • ${rec.name}: No update today`);
+    if (hasError && firstErrorBlock) {
+      firstErrorBlock.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      statusMsg.className   = 'status-msg error';
+      statusMsg.textContent = '⚠️ Please fix the errors above before submitting';
       return;
     }
 
-    let recOffers = 0;
-    const accGroup = {};
-
-    rec.lines.forEach(l => {
-      if (!l.acc) return;
-      const key = l.acc.toLowerCase();
-      if (!accGroup[key]) accGroup[key] = { display: l.acc, offer: 0, ops: 0, poc: 0, hr: 0, comments: [] };
-      accGroup[key].offer += l.offer;
-      accGroup[key].ops   += l.ops;
-      accGroup[key].poc   += l.poc;
-      accGroup[key].hr    += l.hr;
-      if (l.comment) accGroup[key].comments.push(l.comment);
-    });
-
-    const recParts = [];
-    Object.values(accGroup).forEach(a => {
-      const stageParts = [];
-      if (a.offer) stageParts.push(`${a.offer} Offer`);
-      if (a.ops)   stageParts.push(`${a.ops} OPS`);
-      if (a.poc)   stageParts.push(`${a.poc} POC`);
-      if (a.hr)    stageParts.push(`${a.hr} HR`);
-      if (stageParts.length === 0) return;
-
-      let accLine = `${a.display}: ${stageParts.join(' · ')}`;
-      if (a.comments.length) accLine += ` (${a.comments.join(', ')})`;
-      recParts.push(accLine);
-
-      recOffers   += a.offer;
-      totalOffers += a.offer;
-      totalOPS    += a.ops;
-      totalPOC    += a.poc;
-      totalHR     += a.hr;
-
-      const key = a.display.toLowerCase();
-      if (!accountMap[key]) accountMap[key] = { display: a.display, offer: 0, ops: 0, poc: 0, hr: 0 };
-      accountMap[key].offer += a.offer;
-      accountMap[key].ops   += a.ops;
-      accountMap[key].poc   += a.poc;
-      accountMap[key].hr    += a.hr;
-    });
-
-    if (recParts.length) {
-      postLines.push(`  • ${rec.name}:\n      ${recParts.join('\n      ')}`);
-    } else {
-      postLines.push(`  • ${rec.name}: No moves recorded`);
+    if (!hasData) {
+      statusMsg.className   = 'status-msg error';
+      statusMsg.textContent = '🤨 فين الأرقام يا وحش؟ حط حاجة واحدة على الأقل!';
+      return;
     }
-
-    if (recOffers > maxOffers) { maxOffers = recOffers; topNames = [rec.name]; }
-    else if (recOffers === maxOffers && recOffers > 0) topNames.push(rec.name);
-  });
-
-  const sep = '─'.repeat(42);
-  let post  = `📋 DAILY RECRUITMENT UPDATE\n${dateStr}\n${sep}\n\n`;
-  post += `👥 TEAM UPDATES\n` + postLines.join('\n') + '\n';
-  post += `\n📊 BY ACCOUNT\n`;
-  Object.values(accountMap).forEach(a => {
-    const parts = [];
-    if (a.offer) parts.push(`${a.offer} Offer`);
-    if (a.ops)   parts.push(`${a.ops} OPS`);
-    if (a.poc)   parts.push(`${a.poc} POC`);
-    if (a.hr)    parts.push(`${a.hr} HR`);
-    if (parts.length) post += `  ${a.display}: ${parts.join(' · ')}\n`;
-  });
-
-  post += `\n📈 TOTALS\n`;
-  if (totalOffers) post += `  Offers          : ${totalOffers}\n`;
-  if (totalOPS)    post += `  OPS             : ${totalOPS}\n`;
-  if (totalPOC)    post += `  POC             : ${totalPOC}\n`;
-  if (totalHR)     post += `  HR Interviews   : ${totalHR}\n`;
-
-  if (topNames.length) {
-    post += `\n⭐ TOP CONTRIBUTOR${topNames.length > 1 ? 'S' : ''}\n`;
-    post += `  ${topNames.join(' · ')}`;
-    if (maxOffers > 0) post += ` — ${maxOffers} Offer${maxOffers > 1 ? 's' : ''}`;
-    post += '\n';
   }
 
-  post += `\n${sep}\n`;
-  document.getElementById('postBox').textContent = post;
+  submitBtn.disabled    = true;
+  statusMsg.className   = 'status-msg sending';
+  statusMsg.textContent = '⏳ One moment... submitting your numbers';
+
+  try {
+    const response = await fetch(API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify(entries)
+    });
+
+    const result = await response.json();
+
+    if (result.status !== 'ok') {
+      throw new Error(result.message || 'Server rejected the submission');
+    }
+
+    const overrideNotice = document.getElementById('overrideNotice');
+    if (result.override) {
+      overrideNotice.style.display = 'inline-block';
+    } else {
+      overrideNotice.style.display = 'none';
+    }
+
+    const successMsg = getSuccessMessage(recruiter, totalOffers, noUpdate);
+    document.getElementById('successTitle').textContent        = 'Updates are sent!';
+    document.getElementById('successMotivational').textContent = successMsg;
+
+    const summaryEl = document.getElementById('successSummary');
+    if (!noUpdate && entries.length > 0) {
+      let summaryHTML = '<strong style="color:var(--fd-lavender);">📊 What you submitted:</strong><br><br>';
+      entries.forEach(e => {
+        const parts = [];
+        if (e.offers)    parts.push(`${e.offers} Offer${e.offers > 1 ? 's' : ''}`);
+        if (e.pendingfb) parts.push(`${e.pendingfb} PFB`);
+        if (e.ops)       parts.push(`${e.ops} OPS`);
+        if (e.poc)       parts.push(`${e.poc} POC`);
+        if (e.hr)        parts.push(`${e.hr} HR`);
+        const langTag = e.language !== 'English' ? ` <span style="color:var(--fd-lemon);">[${e.language}]</span>` : '';
+        summaryHTML += `• <strong>${e.account}</strong>${langTag}: ${parts.join(' · ') || 'Comment only'}`;
+        if (e.comment && e.comment !== 'No update today') {
+          summaryHTML += ` <em style="color:var(--fd-lavender);">"${e.comment}"</em>`;
+        }
+        summaryHTML += '<br>';
+      });
+      summaryEl.innerHTML     = summaryHTML;
+      summaryEl.style.display = 'block';
+    } else {
+      summaryEl.style.display = 'none';
+    }
+
+    document.getElementById('formCard').style.display          = 'none';
+    document.getElementById('updateTypeSection').style.display = 'none';
+    document.getElementById('successCard').style.display        = 'block';
+
+  } catch (err) {
+    statusMsg.className   = 'status-msg error';
+    statusMsg.textContent = '❌ Something went wrong while sending. Please check your connection and try again.';
+    submitBtn.disabled    = false;
+  }
 }
 
-// ── COPY TEAMS POST ──
-function copyPost() {
-  const text = document.getElementById('postBox').textContent;
-  if (!text || text.startsWith('Click')) return;
-  navigator.clipboard.writeText(text).then(() => {
-    const el = document.getElementById('copyOk');
-    el.style.opacity = '1';
-    setTimeout(() => el.style.opacity = '0', 2500);
-  });
+// ═══════════════════════════════════════════════
+// RESET FORM
+// ═══════════════════════════════════════════════
+function resetForm() {
+  document.getElementById('formCard').style.display          = 'block';
+  document.getElementById('updateTypeSection').style.display = 'block';
+  document.getElementById('successCard').style.display        = 'none';
+  document.getElementById('overrideNotice').style.display     = 'none';
+  document.getElementById('statusMsg').textContent            = '';
+  document.getElementById('submitBtn').disabled               = false;
+
+  const saved = localStorage.getItem('recruiterName');
+  document.getElementById('recruiterName').value = saved || '';
+
+  document.getElementById('noUpdateCheck').checked = false;
+
+  const section = document.getElementById('accountSection');
+  section.style.opacity       = '1';
+  section.style.pointerEvents = 'auto';
+
+  document.getElementById('accountList').innerHTML = '';
+  addAccount();
+  initUpdateType();
 }
 
-// ── GENERATE EXCEL EXPORT ──
-function generateExcelExport() {
-  const data = getAllData();
-
-  // Sort recruiter names alphabetically (case-insensitive — matches Excel A-Z sort)
-  const sortedRecruiters = [...RECRUITER_NAMES].sort((a, b) =>
-    a.toLowerCase().localeCompare(b.toLowerCase())
-  );
-
-  // Build map: recruiter name → total offers for the day
-  const offerMap = {};
-  data.forEach(rec => {
-    if (!rec.name || rec.noUpdate) return;
-    let recTotal = 0;
-    rec.lines.forEach(l => { recTotal += l.offer || 0; });
-    offerMap[rec.name.trim()] = (offerMap[rec.name.trim()] || 0) + recTotal;
-  });
-
-  // Format date for Excel column header (e.g. 1/5/2026)
-  const excelDate = `${today.getMonth() + 1}/${today.getDate()}/${today.getFullYear()}`;
-
-  // Readable date for display
-  const readableDate = today.toLocaleDateString('en-GB', {
-    weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
-  });
-
-  // Build copyable column: date + one number per recruiter in alphabetical order
-  const copyLines = [];
-  copyLines.push(excelDate);
-
-  let dayTotal = 0;
-
-  sortedRecruiters.forEach(name => {
-    const offers = offerMap[name] || 0;
-    dayTotal += offers;
-    copyLines.push(`${offers}`);
-  });
-
-  // Build visual preview (with names for verification)
-  const sep = '─'.repeat(40);
-  let preview = '';
-  preview += `📊 Excel Export — ${readableDate}\n`;
-  preview += `${sep}\n`;
-  preview += `📋 Copyable Column (paste into Excel):\n\n`;
-  preview += copyLines.join('\n');
-  preview += `\n\n${sep}\n`;
-  preview += `Day Total: ${dayTotal}\n`;
-  preview += `${sep}\n\n`;
-
-  // Verification list (names + numbers — for your eyes only)
-  preview += `👁️ Verification (DO NOT paste — reference only):\n\n`;
-  preview += `Date: ${excelDate}\n`;
-  sortedRecruiters.forEach(name => {
-    const offers = offerMap[name] || 0;
-    preview += `${name.padEnd(22)} → ${offers}\n`;
-  });
-
-  document.getElementById('excelBox').textContent = preview;
-
-  // Store clean paste data for copy function
-  document.getElementById('excelBox').dataset.copyData = copyLines.join('\n');
+// ✅ NEW: Dark Mode Toggle with LocalStorage
+function toggleTheme() {
+  document.body.classList.toggle('dark-mode');
+  const isDark = document.body.classList.contains('dark-mode');
+  localStorage.setItem('fd-theme', isDark ? 'dark' : 'light');
+  document.querySelector('.theme-toggle-icon').textContent = isDark ? '☀️' : '🌙';
 }
 
-// ── COPY EXCEL EXPORT ──
-function copyExcel() {
-  const box = document.getElementById('excelBox');
-  const text = box.dataset.copyData || '';
-  if (!text) return;
-  navigator.clipboard.writeText(text).then(() => {
-    const el = document.getElementById('copyOkExcel');
-    el.style.opacity = '1';
-    setTimeout(() => el.style.opacity = '0', 2500);
-  });
-}
+// ✅ NEW: Load saved theme on page load
+(function loadSavedTheme() {
+  const saved = localStorage.getItem('fd-theme');
+  if (saved === 'dark') {
+    document.body.classList.add('dark-mode');
+    document.querySelector('.theme-toggle-icon').textContent = '☀️';
+  }
+})();
 </script>
 </body>
 </html>
